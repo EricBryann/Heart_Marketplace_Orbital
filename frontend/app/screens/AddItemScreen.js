@@ -7,13 +7,20 @@ import Screen from "../components/Screen";
 import SubmitButton from "../components/SubmitButton";
 import AppFormImageField from "../components/form/AppFormImageField";
 import colors from "../config/colors";
+import CategoryOptionsField from "../components/form/CategoryOptionsField";
 
 function AddItemScreen(props) {
   const validationSchema = Yup.object().shape({
     images: Yup.array().min(1, "Please select at least 1 image"),
     title: Yup.string().required().min(1).label("Title"),
-    minPrice: Yup.number().required().max(1000).label("Minimum Price"),
-    maxPrice: Yup.number().required().min(1).label("Maximum Price"),
+    minPrice: Yup.number().positive().required().label("Minimum Price"),
+    maxPrice: Yup.number()
+      .required()
+      .min(
+        Yup.ref("minPrice"),
+        "Maximum price must be more than or equal to minimum price"
+      )
+      .label("Maximum Price"),
     category: Yup.string().required().nullable().label("Category"),
     description: Yup.string().label("Description"),
   });
@@ -35,16 +42,22 @@ function AddItemScreen(props) {
           <AppFormImageField name="images" />
           <AppFormField name="title" placeholderName="Title" />
           <AppFormField
+            keyboardType="numeric"
             name="minPrice"
             placeholderName="Minimum Price"
             width="50%"
           />
           <AppFormField
+            keyboardType="numeric"
             name="maxPrice"
             placeholderName="Maximum Price"
             width="50%"
           />
-          <AppFormField name="category" placeholderName="Category" />
+          <CategoryOptionsField
+            title="Category"
+            iconName="chevron-down"
+            name="category"
+          />
           <AppFormField
             name="description"
             placeholderName="Description"
