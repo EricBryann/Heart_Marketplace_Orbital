@@ -1,0 +1,78 @@
+import React, { useState } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
+import AppForm from "../components/form/AppForm";
+import * as Yup from "yup";
+import Screen from "../components/Screen";
+import AppFormField from "../components/form/AppFormField";
+import SubmitButton from "../components/SubmitButton";
+import * as ImagePicker from "expo-image-picker";
+import ImageInput from "../components/ImageInput";
+import colors from "../config/colors";
+
+function SignUpScreen() {
+  const [imageUri, changeUri] = useState();
+
+  const handlePress = async () => {
+    try {
+      const res = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.5,
+      });
+      if (!res.cancelled) changeUri(res.uri);
+    } catch (error) {
+      console.log("Error reading the image", error);
+    }
+  };
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required().label("Name"),
+    email: Yup.string().required().email().label("Email"),
+    password: Yup.string().required().min(8).label("Password"),
+  });
+
+  return (
+    <Screen style={styles.container}>
+      <ScrollView>
+        <View style={styles.image}>
+          <ImageInput imageUri={imageUri} onPress={handlePress} />
+        </View>
+        <AppForm
+          initialValues={{ name: "", email: "", password: "" }}
+          onSubmit={(values) => console.log(values)}
+          validationSchema={validationSchema}
+        >
+          <AppFormField name="name" iconName="account" placeholderName="Name" />
+          <AppFormField name="email" iconName="email" placeholder="Email" />
+          <AppFormField
+            name="password"
+            iconName="lock"
+            placeholderName="Password"
+            secureTextEntry
+          />
+
+          <View style={styles.button}>
+            <SubmitButton title="Sign Up" />
+          </View>
+        </AppForm>
+      </ScrollView>
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: colors.white,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+    alignSelf: "center",
+  },
+  button: {
+    marginVertical: 20,
+  },
+});
+
+export default SignUpScreen;
