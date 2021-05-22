@@ -12,12 +12,14 @@ function AppTextInput({
   return (
     <View style={[styles.container, { width }]}>
       <MaterialCommunityIcons name={iconName} style={styles.icon} size={20} />
-      <TextInput
-        placeholder={placeholderName}
-        placeholderTextColor={colors.grey}
-        style={styles.text}
-        {...otherProps}
-      ></TextInput>
+      <View style={styles.textInputContainer}>
+        <TextInput
+          placeholder={placeholderName}
+          placeholderTextColor={colors.grey}
+          style={styles.text}
+          {...otherProps}
+        ></TextInput>
+      </View>
     </View>
   );
 }
@@ -36,6 +38,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+  },
+  textInputContainer: {
+    flex: 1,
   },
 });
 

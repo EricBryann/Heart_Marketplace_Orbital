@@ -1,10 +1,12 @@
 import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AddItemScreen from "../screens/AddItemScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/HomeScreen";
 import AccountScreen from "../screens/AccountScreen";
+import SearchScreen from "../screens/SearchScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,6 +18,15 @@ const TabNavigator = () => (
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="home" color={color} size={size} />
+        ),
+      }}
+    ></Tab.Screen>
+    <Tab.Screen
+      name="Search"
+      component={SearchScreen}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome name="search" color={color} size={size}></FontAwesome>
         ),
       }}
     ></Tab.Screen>
