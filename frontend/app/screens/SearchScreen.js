@@ -11,85 +11,18 @@ import Screen from "../components/Screen";
 import { FontAwesome } from "@expo/vector-icons";
 import colors from "../config/colors";
 import CardItem from "../components/CardItem";
+import { getProducts, getUsers } from "../Auth/Auth";
+import ListItem from "../components/list/ListItem";
 
-const products = [
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Book",
-    minPrice: 10,
-    maxPrice: 20,
-    id: 1,
-  },
-  {
-    imageUri: "",
-    title: "Bottle",
-    minPrice: 20,
-    maxPrice: 40,
-    id: 2,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Bag",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 3,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Calculator",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 4,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Wallet",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 5,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Bowl",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 6,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Pants",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 7,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Shirt",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 8,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Pants",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 9,
-  },
-  {
-    imageUri: require("../../assets/mypic.jpg"),
-    title: "Shirt",
-    minPrice: 50,
-    maxPrice: 60,
-    id: 10,
-  },
-];
+const products = getProducts();
+const users = getUsers();
 
-function SearchScreen(props) {
+function SearchScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
   const [refresh, setRefresh] = useState(false);
   const [input, setInput] = useState("");
   const [productsToShow, setProductsToShow] = useState(products);
+  const [usersToShow, setUsersToShow] = useState(users);
   const handleRefresh = () => {
     console.log("refresh");
   };
@@ -100,6 +33,12 @@ function SearchScreen(props) {
     setProductsToShow(
       products.filter((product) => {
         return product.title.startsWith(input);
+      })
+    );
+    setUsersToShow(
+      users.filter((user) => {
+        if (input === "") return null;
+        return user.username.startsWith(input);
       })
     );
   }, [input]);
@@ -161,12 +100,29 @@ function SearchScreen(props) {
                 title={item.title}
                 minPrice={item.minPrice}
                 maxPrice={item.maxPrice}
+                onPress={() => navigation.navigate("SearchItemDetails", item)}
               />
             )}
             refreshing={refresh}
             onRefresh={handleRefresh}
             columnWrapperStyle={styles.row}
           ></FlatList>
+        </View>
+      )}
+      {selected === "users" && (
+        <View style={styles.usersSection}>
+          {usersToShow.map((user) => {
+            return (
+              <View style={styles.userItem}>
+                <ListItem
+                  key={user.username}
+                  title={user.username}
+                  subTitle={user.name}
+                  imageUri={require("../../assets/mypic.jpg")}
+                />
+              </View>
+            );
+          })}
         </View>
       )}
     </Screen>
@@ -219,6 +175,9 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     justifyContent: "space-around",
+  },
+  userItem: {
+    marginVertical: 5,
   },
 });
 

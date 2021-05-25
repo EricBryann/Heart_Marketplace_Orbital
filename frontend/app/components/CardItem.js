@@ -1,23 +1,26 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import colors from "../config/colors";
 
-function CardItem({ imageUri, title, minPrice, maxPrice }) {
+function CardItem({ imageUri, title, minPrice, maxPrice, onPress }) {
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={require("../../assets/mypic.jpg")}
-          style={styles.image}
-        />
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require("../../assets/mypic.jpg")}
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.price}>
+            ${minPrice} - ${maxPrice}
+          </Text>
+        </View>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.price}>
-          ${minPrice} - ${maxPrice}
-        </Text>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

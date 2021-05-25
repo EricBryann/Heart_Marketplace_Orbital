@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/HomeScreen";
 import AccountScreen from "../screens/AccountScreen";
 import SearchScreen from "../screens/SearchScreen";
+import SearchNavigator from "./SearchNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +24,7 @@ const TabNavigator = () => (
     ></Tab.Screen>
     <Tab.Screen
       name="Search"
-      component={SearchScreen}
+      component={SearchNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
           <FontAwesome name="search" color={color} size={size}></FontAwesome>

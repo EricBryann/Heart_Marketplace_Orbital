@@ -6,21 +6,10 @@ import Screen from "../components/Screen";
 import AppFormField from "../components/form/AppFormField";
 import SubmitButton from "../components/SubmitButton";
 import colors from "../config/colors";
-import Auth from "../Auth/Auth";
+import { Auth, getUsers } from "../Auth/Auth";
 
 function LoginScreen() {
-  const users = [
-    {
-      name: "Eric Bryan",
-      email: "eric.bryan2001@gmail.com",
-      password: "ericbryan",
-    },
-    {
-      name: "Test",
-      email: "test@gmail.com",
-      password: "testings",
-    },
-  ];
+  const users = getUsers();
   const Authentication = useContext(Auth);
   const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),

@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
 import ListItem from "../components/list/ListItem";
-import Auth from "../Auth/Auth";
+import { Auth } from "../Auth/Auth";
 
 function AccountScreen(props) {
   const Authentication = useContext(Auth);

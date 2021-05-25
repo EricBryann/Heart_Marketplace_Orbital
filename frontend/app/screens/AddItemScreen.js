@@ -13,6 +13,7 @@ function AddItemScreen(props) {
   const validationSchema = Yup.object().shape({
     images: Yup.array().min(1, "Please select at least 1 image"),
     title: Yup.string().required().min(1).label("Title"),
+    quantity: Yup.number().positive().required().label("Quantity"),
     minPrice: Yup.number().positive().required().label("Minimum Price"),
     maxPrice: Yup.number()
       .required()
@@ -31,6 +32,7 @@ function AddItemScreen(props) {
           initialValues={{
             images: [],
             title: "",
+            quantity: "",
             minPrice: "",
             maxPrice: "",
             category: "",
@@ -41,6 +43,12 @@ function AddItemScreen(props) {
         >
           <AppFormImageField name="images" />
           <AppFormField name="title" placeholderName="Title" />
+          <AppFormField
+            keyboardType="numeric"
+            name="quantity"
+            placeholderName="Quantity"
+            width="50%"
+          />
           <AppFormField
             keyboardType="numeric"
             name="minPrice"
