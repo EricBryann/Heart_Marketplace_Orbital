@@ -14,14 +14,7 @@ function AddItemScreen(props) {
     images: Yup.array().min(1, "Please select at least 1 image"),
     title: Yup.string().required().min(1).label("Title"),
     quantity: Yup.number().positive().required().label("Quantity"),
-    minPrice: Yup.number().positive().required().label("Minimum Price"),
-    maxPrice: Yup.number()
-      .required()
-      .min(
-        Yup.ref("minPrice"),
-        "Maximum price must be more than or equal to minimum price"
-      )
-      .label("Maximum Price"),
+    minPrice: Yup.number().positive().required().label("Price"),
     category: Yup.string().required().nullable().label("Category"),
     description: Yup.string().label("Description"),
   });
@@ -33,8 +26,7 @@ function AddItemScreen(props) {
             images: [],
             title: "",
             quantity: "",
-            minPrice: "",
-            maxPrice: "",
+            price: "",
             category: "",
             description: "",
           }}
@@ -51,14 +43,8 @@ function AddItemScreen(props) {
           />
           <AppFormField
             keyboardType="numeric"
-            name="minPrice"
-            placeholderName="Minimum Price"
-            width="50%"
-          />
-          <AppFormField
-            keyboardType="numeric"
-            name="maxPrice"
-            placeholderName="Maximum Price"
+            name="price"
+            placeholderName="Price"
             width="50%"
           />
           <CategoryOptionsField

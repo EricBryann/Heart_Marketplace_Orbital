@@ -1,9 +1,14 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
+import Screen from "../components/Screen";
 import colors from "../config/colors";
 
 function HomeScreen(props) {
-  return <View style={styles.container}></View>;
+  return (
+    <Screen style={styles.container}>
+      <Text>HomeScreeen</Text>
+    </Screen>
+  );
 }
 
 const styles = StyleSheet.create({

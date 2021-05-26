@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import AppForm from "../components/form/AppForm";
 import * as Yup from "yup";
 import Screen from "../components/Screen";
@@ -8,9 +8,31 @@ import SubmitButton from "../components/SubmitButton";
 import * as ImagePicker from "expo-image-picker";
 import ImageInput from "../components/ImageInput";
 import colors from "../config/colors";
+import { auth } from "../api/firebase";
+import { Auth } from "../Auth/Auth";
 
 function SignUpScreen() {
   const [imageUri, changeUri] = useState();
+  const Authentication = useContext(Auth);
+  const signUp = async (user) => {
+    try {
+      await auth.createUserWithEmailAndPassword(user.email, user.password);
+      const currentUser = auth.currentUser;
+      await currentUser.updateProfile({
+        displayName: user.name,
+        // photoURL: user.imageUri,
+        // username: user.username,
+      });
+      Authentication.setUser({
+        name: currentUser.displayName,
+        email: currentUser.email,
+        photoURL: user.imageUri,
+      });
+      console.log(currentUser);
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   const handlePress = async () => {
     try {
@@ -25,6 +47,7 @@ function SignUpScreen() {
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string().required().label("Name"),
+    username: Yup.string().required().label("Username"),
     email: Yup.string().required().email().label("Email"),
     password: Yup.string().required().min(8).label("Password"),
   });
@@ -32,15 +55,28 @@ function SignUpScreen() {
   return (
     <Screen style={styles.container}>
       <ScrollView>
-        <View style={styles.image}>
-          <ImageInput imageUri={imageUri} onPress={handlePress} />
-        </View>
         <AppForm
-          initialValues={{ name: "", email: "", password: "" }}
-          onSubmit={(values) => console.log(values)}
+          initialValues={{
+            imageUri: "",
+            name: "",
+            username: "",
+            email: "",
+            password: "",
+          }}
+          onSubmit={(values) => {
+            signUp(values);
+          }}
           validationSchema={validationSchema}
         >
+          <View style={styles.image}>
+            <ImageInput imageUri={imageUri} onPress={handlePress} />
+          </View>
           <AppFormField name="name" iconName="account" placeholderName="Name" />
+          <AppFormField
+            name="username"
+            iconName="account"
+            placeholderName="Username"
+          />
           <AppFormField name="email" iconName="email" placeholder="Email" />
           <AppFormField
             name="password"

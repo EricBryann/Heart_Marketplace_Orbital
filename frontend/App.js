@@ -15,14 +15,8 @@ import CardItem from "./app/components/CardItem";
 import CardItemDetails from "./app/components/CardItemDetails";
 
 export default function App() {
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(user);
   return (
-    // <CardItemDetails
-    //   title="Broom"
-    //   minPrice={10}
-    //   maxPrice={20}
-    //   description="Damn good brooms"
-    // />
     <Auth.Provider value={{ user, setUser }}>
       {user ? <MainNavigator /> : <AuthNavigator />}
     </Auth.Provider>

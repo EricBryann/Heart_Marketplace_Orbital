@@ -17,6 +17,7 @@ function AccountScreen(props) {
           title={Authentication.user.name}
           subTitle={Authentication.user.email}
           imageUri={require("../../assets/mypic.jpg")}
+          // imageUri={Authentication.user.photoURL}
           backgroundColor={colors.lightgrey}
         />
       </View>

@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import colors from "../config/colors";
 
-function CardItem({ imageUri, title, minPrice, maxPrice, onPress }) {
+function CardItem({ imageUri, title, price, onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
@@ -15,9 +15,7 @@ function CardItem({ imageUri, title, minPrice, maxPrice, onPress }) {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.price}>
-            ${minPrice} - ${maxPrice}
-          </Text>
+          <Text style={styles.price}>${price}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>

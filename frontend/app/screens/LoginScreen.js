@@ -7,10 +7,24 @@ import AppFormField from "../components/form/AppFormField";
 import SubmitButton from "../components/SubmitButton";
 import colors from "../config/colors";
 import { Auth, getUsers } from "../Auth/Auth";
+import { auth } from "../api/firebase";
 
 function LoginScreen() {
-  const users = getUsers();
   const Authentication = useContext(Auth);
+  const login = async ({ email, password }) => {
+    try {
+      const currentUser = await auth.signInWithEmailAndPassword(
+        email,
+        password
+      );
+      Authentication.setUser({
+        name: currentUser.user.displayName,
+        email: currentUser.user.email,
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
   const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
     password: Yup.string().required().min(8).label("Password"),
@@ -26,17 +40,7 @@ function LoginScreen() {
         <AppForm
           initialValues={{ email: "", password: "" }}
           onSubmit={(values) => {
-            console.log(values);
-            const user = users.find((user) => user.email === values.email);
-            if (user) {
-              if (user.password === values.password) {
-                return Authentication.setUser({
-                  name: user.name,
-                  email: user.email,
-                });
-              }
-            }
-            alert("Wrong credentials");
+            login(values);
           }}
           validationSchema={validationSchema}
         >

@@ -98,8 +98,7 @@ function SearchScreen({ navigation }) {
             renderItem={({ item }) => (
               <CardItem
                 title={item.title}
-                minPrice={item.minPrice}
-                maxPrice={item.maxPrice}
+                price={item.price}
                 onPress={() => navigation.navigate("SearchItemDetails", item)}
               />
             )}

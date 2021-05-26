@@ -31,9 +31,7 @@ function CardItemDetails({ route }) {
               )}
             </TouchableWithoutFeedback>
           </View>
-          <Text style={styles.price}>
-            Price Range : ${itemDetails.minPrice} - ${itemDetails.maxPrice}
-          </Text>
+          <Text style={styles.price}>Price Range : ${itemDetails.price}</Text>
           <Text style={styles.quantity}>
             Quantity Left : {itemDetails.quantity}
           </Text>
