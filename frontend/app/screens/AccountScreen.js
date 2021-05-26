@@ -4,11 +4,13 @@ import colors from "../config/colors";
 import Screen from "../components/Screen";
 import ListItem from "../components/list/ListItem";
 import { Auth } from "../Auth/Auth";
+import { auth } from "../api/firebase";
 
 function AccountScreen(props) {
   const Authentication = useContext(Auth);
   const logout = () => {
     Authentication.setUser();
+    auth.signOut();
   };
   return (
     <Screen style={styles.container}>

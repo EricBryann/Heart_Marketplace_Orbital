@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AppButton from "./app/components/AppButton";
 import AuthNavigator from "./app/navigators/AuthNavigator";
@@ -13,9 +13,15 @@ import { Auth } from "./app/Auth/Auth";
 import SearchScreen from "./app/screens/SearchScreen";
 import CardItem from "./app/components/CardItem";
 import CardItemDetails from "./app/components/CardItemDetails";
+import { auth } from "./app/api/firebase";
 
 export default function App() {
-  const [user, setUser] = useState(user);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+  }, []);
   return (
     <Auth.Provider value={{ user, setUser }}>
       {user ? <MainNavigator /> : <AuthNavigator />}
