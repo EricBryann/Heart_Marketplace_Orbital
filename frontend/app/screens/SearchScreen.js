@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
   userItem: {
     marginVertical: 5,
