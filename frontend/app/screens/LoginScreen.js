@@ -18,7 +18,7 @@ function LoginScreen() {
         password
       );
       Authentication.setUser({
-        name: currentUser.user.displayName,
+        displayName: currentUser.user.displayName,
         email: currentUser.user.email,
       });
     } catch (error) {

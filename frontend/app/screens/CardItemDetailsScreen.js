@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import colors from "../config/colors";
-import Screen from "./Screen";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-function CardItemDetails({ route }) {
+function CardItemDetailsScreen({ route }) {
   const itemDetails = route.params;
   const [isLiked, setIsLiked] = useState(false);
   const handleLike = () => {
@@ -79,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardItemDetails;
+export default CardItemDetailsScreen;

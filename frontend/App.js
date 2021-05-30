@@ -12,17 +12,20 @@ import SignUpScreen from "./app/screens/SignUpScreen";
 import { Auth } from "./app/Auth/Auth";
 import SearchScreen from "./app/screens/SearchScreen";
 import CardItem from "./app/components/CardItem";
-import CardItemDetails from "./app/components/CardItemDetails";
+import { auth } from "./app/api/firebase";
+import AccountNavigator from "./app/navigators/AccountNavigator";
 
 export default function App() {
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log(user);
+      setUser(user);
+    });
+  }, []);
+
   return (
-    // <CardItemDetails
-    //   title="Broom"
-    //   minPrice={10}
-    //   maxPrice={20}
-    //   description="Damn good brooms"
-    // />
+    // <AccountNavigator />
     <Auth.Provider value={{ user, setUser }}>
       {user ? <MainNavigator /> : <AuthNavigator />}
     </Auth.Provider>

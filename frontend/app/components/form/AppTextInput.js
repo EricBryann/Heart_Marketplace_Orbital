@@ -26,11 +26,11 @@ function AppTextInput({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 10,
+    marginVertical: 8,
     flexDirection: "row",
     borderRadius: 25,
     backgroundColor: colors.lightgrey,
-    padding: 15,
+    padding: 10,
     alignItems: "center",
   },
   icon: {

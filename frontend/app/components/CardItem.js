@@ -3,10 +3,18 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import colors from "../config/colors";
 
-function CardItem({ imageUri, title, price, onPress }) {
+function CardItem({
+  imageUri,
+  title,
+  price,
+  onPress,
+  width = 160,
+  height = 200,
+  titleFontSize = 18,
+}) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.container}>
+      <View style={[styles.container, { width: width, height: height }]}>
         <View style={styles.imageContainer}>
           <Image
             source={require("../../assets/mypic.jpg")}
@@ -25,8 +33,6 @@ function CardItem({ imageUri, title, price, onPress }) {
 const styles = StyleSheet.create({
   container: {
     margin: 10,
-    width: 170,
-    height: 210,
     borderWidth: 2,
     borderRadius: 5,
   },
@@ -41,7 +47,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: 20,
     paddingHorizontal: 5,
     paddingVertical: 2,
   },

@@ -1,50 +1,206 @@
-import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableWithoutFeedback,
+  FlatList,
+  ScrollView,
+} from "react-native";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
-import ListItem from "../components/list/ListItem";
 import { Auth } from "../Auth/Auth";
 import { auth } from "../api/firebase";
+import { Ionicons } from "@expo/vector-icons";
+import CardItem from "../components/CardItem";
 
-function AccountScreen(props) {
-  const Authentication = useContext(Auth);
-  const logout = () => {
-    Authentication.setUser();
-    auth.signOut();
+const productsPosted = [
+  {
+    title: "Spectacle",
+    price: 10,
+    id: 1,
+    description: "bla3x",
+    quantity: 10,
+  },
+  {
+    title: "Pencil Case",
+    price: 20,
+    id: 2,
+    description: "bla3x",
+    quantity: 10,
+  },
+  {
+    title: "Chilli",
+    price: 5,
+    id: 3,
+    description: "bla3x",
+    quantity: 10,
+  },
+  {
+    title: "Spectacle",
+    price: 10,
+    id: 4,
+    description: "bla3x",
+    quantity: 10,
+  },
+  {
+    title: "Pencil Case",
+    price: 20,
+    id: 5,
+    description: "bla3x",
+    quantity: 10,
+  },
+  {
+    title: "Chilli",
+    price: 5,
+    id: 6,
+    description: "bla3x",
+    quantity: 10,
+  },
+];
+
+function AccountScreen({ navigation }) {
+  const [refresh, onRefresh] = useState(false);
+
+  const handleRefresh = () => {
+    console.log("refresh");
   };
+  const Authentication = useContext(Auth);
+
   return (
     <Screen style={styles.container}>
-      <View style={styles.profile}>
-        <ListItem
-          title={Authentication.user.name}
-          subTitle={Authentication.user.email}
-          imageUri={require("../../assets/mypic.jpg")}
-          // imageUri={Authentication.user.photoURL}
-          backgroundColor={colors.lightgrey}
-        />
+      <View style={styles.menu}>
+        <View style={styles.menuTitle}>
+          <Text style={styles.title}>Heart Marketplace</Text>
+        </View>
+        <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
+          <Ionicons name="menu-outline" size={35} color="black" />
+        </TouchableWithoutFeedback>
       </View>
-      <View></View>
-      <View style={styles.logout}>
-        <ListItem
-          title="Log Out"
-          iconName="logout"
-          backgroundColor="#ffe66d"
-          onPress={logout}
-        />
-      </View>
+      <FlatList
+        ListHeaderComponent={
+          <ScrollView>
+            <View style={styles.topContainer}>
+              <Image
+                style={styles.image}
+                source={require("../../assets/mypic.jpg")}
+              />
+              <View style={styles.detailSection}>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Posts</Text>
+                  <Text style={styles.sectionBodyText}>
+                    {productsPosted.length}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Followings</Text>
+                  <Text style={styles.sectionBodyText}>500</Text>
+                </View>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Followers</Text>
+                  <Text style={styles.sectionBodyText}>1000</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.userDetailsContainer}>
+              <Text style={styles.username}>
+                {Authentication.user.displayName}
+              </Text>
+              <Text style={styles.userEmail}>{Authentication.user.email}</Text>
+            </View>
+            <View style={styles.horizontalLine}></View>
+            <View style={styles.productSection}></View>
+          </ScrollView>
+        }
+        data={productsPosted}
+        keyExtractor={(product) => product.id.toString()}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <CardItem
+            title={item.title}
+            price={item.price}
+            onPress={() => navigation.navigate("ItemPostedDetails", item)}
+            width={160}
+            height={180}
+          />
+        )}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
+        columnWrapperStyle={styles.row}
+      ></FlatList>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  animatedBox: {
+    marginTop: 50,
+    flex: 1,
+    backgroundColor: "green",
+  },
   container: {
     backgroundColor: colors.white,
+    zIndex: 0,
+    flex: 1,
   },
   profile: {
-    marginVertical: 20,
+    marginBottom: 20,
   },
-  logout: {
-    marginVertical: 20,
+  image: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+  },
+  topContainer: {
+    flexDirection: "row",
+    height: 110,
+    alignItems: "center",
+    paddingLeft: 15,
+  },
+  username: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  userEmail: {},
+  userDetailsContainer: {
+    paddingHorizontal: 10,
+  },
+  detailSection: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  sectionHeaderText: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  sectionBodyText: {
+    textAlign: "center",
+  },
+  menu: {
+    paddingHorizontal: 10,
+    justifyContent: "flex-end",
+    flexDirection: "row",
+  },
+  menuTitle: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: colors.black,
+  },
+  horizontalLine: {
+    width: "100%",
+    height: 1,
+    backgroundColor: colors.lightgrey,
+    marginTop: 10,
+  },
+  row: {
+    flex: 1,
+    justifyContent: "space-between",
   },
 });
 

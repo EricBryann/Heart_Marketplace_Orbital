@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import SearchScreen from "../screens/SearchScreen";
 import CardItemDetailsScreen from "../screens/CardItemDetailsScreen";
+import AccountScreen from "../screens/AccountScreen";
 
 const Stack = createStackNavigator();
 
@@ -9,20 +9,19 @@ const StackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="SearchItem"
-        component={SearchScreen}
+        name="Account"
+        component={AccountScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="SearchItemDetails"
+        name="ItemPostedDetails"
         component={CardItemDetailsScreen}
-        options={{ headerTitle: "" }}
       />
     </Stack.Navigator>
   );
 };
 
-function SearchNavigator(props) {
+function AccountMainNavigator(props) {
   return <StackNavigator />;
 }
-export default SearchNavigator;
+export default AccountMainNavigator;
