@@ -1,10 +1,9 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import AccountScreen from "../screens/AccountScreen";
-import { TouchableWithoutFeedback, Text } from "react-native";
 import LogoutScreen from "../screens/LogoutScreen";
 import EditScreen from "../screens/EditScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import AccountMainNavigator from "./AccountMainNavigator";
 
 const Drawer = createDrawerNavigator();
 
@@ -17,7 +16,7 @@ const DrawerNavigator = () => {
       >
         <Drawer.Screen
           name="Account"
-          component={AccountScreen}
+          component={AccountMainNavigator}
           options={{
             drawerIcon: ({ color, size }) => (
               <MaterialCommunityIcons

@@ -6,16 +6,13 @@ import {
   Text,
   TouchableWithoutFeedback,
   FlatList,
-  Dimensions,
   ScrollView,
 } from "react-native";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
-import ListItem from "../components/list/ListItem";
 import { Auth } from "../Auth/Auth";
 import { auth } from "../api/firebase";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import MenuDrawer from "react-native-side-drawer";
+import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
 
 const productsPosted = [
@@ -23,31 +20,43 @@ const productsPosted = [
     title: "Spectacle",
     price: 10,
     id: 1,
+    description: "bla3x",
+    quantity: 10,
   },
   {
     title: "Pencil Case",
     price: 20,
     id: 2,
+    description: "bla3x",
+    quantity: 10,
   },
   {
     title: "Chilli",
     price: 5,
     id: 3,
+    description: "bla3x",
+    quantity: 10,
   },
   {
     title: "Spectacle",
     price: 10,
     id: 4,
+    description: "bla3x",
+    quantity: 10,
   },
   {
     title: "Pencil Case",
     price: 20,
     id: 5,
+    description: "bla3x",
+    quantity: 10,
   },
   {
     title: "Chilli",
     price: 5,
     id: 6,
+    description: "bla3x",
+    quantity: 10,
   },
 ];
 
@@ -59,11 +68,6 @@ function AccountScreen({ navigation }) {
   };
   const Authentication = useContext(Auth);
 
-  const logout = async () => {
-    Authentication.setUser();
-    await auth.signOut();
-  };
-
   return (
     <Screen style={styles.container}>
       <View style={styles.menu}>
@@ -74,53 +78,57 @@ function AccountScreen({ navigation }) {
           <Ionicons name="menu-outline" size={35} color="black" />
         </TouchableWithoutFeedback>
       </View>
-      <ScrollView>
-        <View style={styles.topContainer}>
-          <Image
-            style={styles.image}
-            source={require("../../assets/mypic.jpg")}
-          />
-          <View style={styles.detailSection}>
-            <View>
-              <Text style={styles.sectionHeaderText}>Posts</Text>
-              <Text style={styles.sectionBodyText}>20</Text>
-            </View>
-            <View>
-              <Text style={styles.sectionHeaderText}>Followings</Text>
-              <Text style={styles.sectionBodyText}>500</Text>
-            </View>
-            <View>
-              <Text style={styles.sectionHeaderText}>Followers</Text>
-              <Text style={styles.sectionBodyText}>1000</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.userDetailsContainer}>
-          <Text style={styles.username}>{Authentication.user.displayName}</Text>
-          <Text style={styles.userEmail}>{Authentication.user.email}</Text>
-        </View>
-        <View style={styles.horizontalLine}></View>
-        <View style={styles.productSection}>
-          <FlatList
-            scrollEnabled={false}
-            data={productsPosted}
-            keyExtractor={(product) => product.id.toString()}
-            numColumns={2}
-            renderItem={({ item }) => (
-              <CardItem
-                title={item.title}
-                price={item.price}
-                onPress={() => console.log(item.title)}
-                width={160}
-                height={180}
+      <FlatList
+        ListHeaderComponent={
+          <ScrollView>
+            <View style={styles.topContainer}>
+              <Image
+                style={styles.image}
+                source={require("../../assets/mypic.jpg")}
               />
-            )}
-            refreshing={refresh}
-            onRefresh={handleRefresh}
-            columnWrapperStyle={styles.row}
-          ></FlatList>
-        </View>
-      </ScrollView>
+              <View style={styles.detailSection}>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Posts</Text>
+                  <Text style={styles.sectionBodyText}>
+                    {productsPosted.length}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Followings</Text>
+                  <Text style={styles.sectionBodyText}>500</Text>
+                </View>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Followers</Text>
+                  <Text style={styles.sectionBodyText}>1000</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.userDetailsContainer}>
+              <Text style={styles.username}>
+                {Authentication.user.displayName}
+              </Text>
+              <Text style={styles.userEmail}>{Authentication.user.email}</Text>
+            </View>
+            <View style={styles.horizontalLine}></View>
+            <View style={styles.productSection}></View>
+          </ScrollView>
+        }
+        data={productsPosted}
+        keyExtractor={(product) => product.id.toString()}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <CardItem
+            title={item.title}
+            price={item.price}
+            onPress={() => navigation.navigate("ItemPostedDetails", item)}
+            width={160}
+            height={180}
+          />
+        )}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
+        columnWrapperStyle={styles.row}
+      ></FlatList>
     </Screen>
   );
 }

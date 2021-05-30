@@ -12,7 +12,6 @@ import SignUpScreen from "./app/screens/SignUpScreen";
 import { Auth } from "./app/Auth/Auth";
 import SearchScreen from "./app/screens/SearchScreen";
 import CardItem from "./app/components/CardItem";
-import CardItemDetails from "./app/components/CardItemDetails";
 import { auth } from "./app/api/firebase";
 import AccountNavigator from "./app/navigators/AccountNavigator";
 
