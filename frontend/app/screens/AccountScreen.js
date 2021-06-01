@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   menu: {
-    paddingHorizontal: 10,
+    padding: 10,
     justifyContent: "flex-end",
     flexDirection: "row",
   },

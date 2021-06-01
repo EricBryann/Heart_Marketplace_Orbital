@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AppButton from "./app/components/AppButton";
 import AuthNavigator from "./app/navigators/AuthNavigator";
