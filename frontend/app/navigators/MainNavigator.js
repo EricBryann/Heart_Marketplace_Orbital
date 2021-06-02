@@ -9,6 +9,7 @@ import AccountScreen from "../screens/AccountScreen";
 import SearchScreen from "../screens/SearchScreen";
 import SearchNavigator from "./SearchNavigator";
 import AccountNavigator from "./AccountNavigator";
+import HomeNavigator from "./HomeNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,7 @@ const TabNavigator = () => (
   <Tab.Navigator screenOptions={{}}>
     <Tab.Screen
       name="Home"
-      component={HomeScreen}
+      component={HomeNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="home" color={color} size={size} />
