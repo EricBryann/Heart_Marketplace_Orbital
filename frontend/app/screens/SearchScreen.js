@@ -99,7 +99,12 @@ function SearchScreen({ navigation }) {
               <CardItem
                 title={item.title}
                 price={item.price}
-                onPress={() => navigation.navigate("SearchItemDetails", item)}
+                onPress={() =>
+                  navigation.navigate("SearchItemDetails", {
+                    ...item,
+                    withTradeButton: true,
+                  })
+                }
               />
             )}
             refreshing={refresh}

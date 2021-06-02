@@ -15,11 +15,17 @@ function ListItem({
   imageUri,
   iconName,
   onPress,
-  backgroundColor,
+  backgroundColor = colors.lightgrey,
+  ...otherProps
 }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: backgroundColor, ...otherProps },
+        ]}
+      >
         <View style={styles.logo}>
           {imageUri && <Image style={styles.image} source={imageUri} />}
           {iconName && <MaterialCommunityIcons name={iconName} size={50} />}
@@ -35,8 +41,7 @@ function ListItem({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightgrey,
-    height: 70,
+    height: 50,
     flexDirection: "row",
     padding: 20,
     justifyContent: "center",
@@ -46,9 +51,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   textContainer: {
     flex: 1,

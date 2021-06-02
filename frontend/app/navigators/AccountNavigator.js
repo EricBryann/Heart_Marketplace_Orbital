@@ -4,6 +4,7 @@ import LogoutScreen from "../screens/LogoutScreen";
 import EditScreen from "../screens/EditScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AccountMainNavigator from "./AccountMainNavigator";
+import MyLikesScreen from "../screens/MyLikesScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -37,6 +38,15 @@ const DrawerNavigator = () => {
                 color={color}
                 size={size}
               />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="My Likes"
+          component={MyLikesScreen}
+          options={{
+            drawerIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="heart" color={color} size={size} />
             ),
           }}
         />

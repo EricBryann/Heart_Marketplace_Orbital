@@ -116,6 +116,13 @@ const styles = StyleSheet.create({
   userItem: {
     marginVertical: 5,
   },
+  headerContainer: {
+    padding: 10,
+  },
+  headerText: {
+    fontSize: 20,
+    fontFamily: "serif",
+  },
 });
 
 export default HomeScreen;
