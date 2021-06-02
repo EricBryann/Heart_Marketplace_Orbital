@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Text,
+  Modal,
   FlatList,
 } from "react-native";
 import Screen from "../components/Screen";
@@ -13,10 +14,15 @@ import colors from "../config/colors";
 import HomeItem from "../components/HomeItem";
 import { getProducts } from "../Auth/Auth";
 import { Ionicons } from "@expo/vector-icons";
+import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 import ListItem from "../components/list/ListItem";
 
 const products = getProducts();
+
+
 
 function HomeScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
@@ -29,6 +35,94 @@ function HomeScreen({ navigation }) {
   const handleChange = (character) => {
     setInput(character);
   };
+
+  const categories = [
+    {
+      backgroundColor: "#fc5c65",
+      icon: "floor-lamp",
+      title: "Furniture",
+      id: 1,
+    },
+    {
+      backgroundColor: "#fd9644",
+      icon: "car",
+      title: "Cars",
+      id: 2,
+    },
+    {
+      backgroundColor: "#fed330",
+      icon: "camera",
+      title: "Cameras",
+      id: 3,
+    },
+    {
+      backgroundColor: "#26de81",
+      icon: "cards",
+      title: "Games",
+      id: 4,
+    },
+    {
+      backgroundColor: "#2bcbba",
+      icon: "shoe-heel",
+      title: "Clothing",
+      id: 5,
+    },
+    {
+      backgroundColor: "#45aaf2",
+      icon: "basketball",
+      title: "Sports",
+      id: 6,
+    },
+    {
+      backgroundColor: "#4b7bec",
+      icon: "headphones",
+      title: "Movies & Music",
+      id: 7,
+    },
+    {
+      backgroundColor: "#a55eea",
+      icon: "book-open-variant",
+      title: "Books",
+      id: 8,
+    },
+    {
+      backgroundColor: "#778ca3",
+      icon: "application",
+      title: "Other",
+      id: 9,
+    },
+  ];
+
+  const handleDrawerSlide = (status) => {
+    // outputs a value between 0 and 1
+    console.log(status);
+  };
+
+  const renderDrawer = (
+      <View style={styles.drawer}>
+          <FlatList
+            data={categories}
+            keyExtractor={(category) => category.id.toString()}
+            numColumns={1}
+            renderItem={({ item }) => (
+              <TouchableWithoutFeedback
+                onPress={() => {
+                }}
+              >
+                <View style={styles.category}>
+                  <MaterialCommunityIcons
+                    name={item.icon}
+                    size={50}
+                    color={item.backgroundColor}
+                  ></MaterialCommunityIcons>
+                  <Text>{item.title}</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            )}
+          />
+      </View>
+  );
+
   useEffect(() => {
     setProductsToShow(
       products.filter((product) => {
@@ -37,75 +131,69 @@ function HomeScreen({ navigation }) {
     );
   }, [input]);
 
+
+
   return (
-    <Screen>
-        <View style={styles.menu}>
-
-        <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
-          <Ionicons name="menu-outline" size={40} color="black" />
-        </TouchableWithoutFeedback>
-      </View>
-        <View style={styles.productSection}>
-          <FlatList
-            data={productsToShow}
-            keyExtractor={(product) => product.id.toString()}
-            numColumns={1}
-            renderItem={({ item }) => (
-              <HomeItem
-                title={item.title}
-                price={item.price}
-                onPress={() => navigation.navigate("SearchItemDetails", item)}
+    <View style = {styles.fl}>
+        <DrawerLayout
+          drawerBackgroundColor="white"
+          drawerWidth={100}
+          keyboardDismissMode="on-drag"
+          statusBarBackgroundColor="blue"
+          renderNavigationView={() => renderDrawer}
+          >
+            <View style={styles.home}>
+            <FlatList
+                data={productsToShow}
+                keyExtractor={(product) => product.id.toString()}
+                numColumns={1}
+                renderItem={({ item }) => (
+                  <HomeItem
+                    title={item.title}
+                    price={item.price}
+                    onPress={() => navigation.navigate("SearchItemDetails", item)}
+                  />
+                )}
+                refreshing={refresh}
+                onRefresh={handleRefresh}
               />
-            )}
-            refreshing={refresh}
-            onRefresh={handleRefresh}
-          ></FlatList>
-        </View>
+            </View>
 
-    </Screen>
+        </DrawerLayout>
+
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  searchInputContainer: {
+  fl: {
     flex: 1,
   },
+  drawer: {
+    flexDirection: "row",
+    paddingVertical: 25,
+    paddingHorizontal: 12,
+    alignItems: "center",
+  },
+
+  category:{
+
+  },
+
   container: {
     margin: 10,
     flexDirection: "row",
     borderRadius: 25,
-    backgroundColor: colors.lightgrey,
     paddingVertical: 6,
     paddingHorizontal: 12,
     alignItems: "center",
   },
-  searchText: {
-    marginLeft: 10,
-    fontSize: 16,
-  },
-  productsOrUsersButtons: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  buttonSelected: {
-    justifyContent: "center",
+
+  home: {
+    paddingTop: 20,
     alignItems: "center",
-    flex: 1,
-    padding: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "black",
-    fontWeight: "bold",
   },
-  wordSelected: {
-    fontWeight: "bold",
-    fontSize: 17,
-  },
-  buttonNotSelected: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    padding: 5,
-  },
+
   productSection: {
     marginBottom: 0,
   },

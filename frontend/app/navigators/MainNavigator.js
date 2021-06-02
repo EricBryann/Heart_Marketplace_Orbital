@@ -4,10 +4,10 @@ import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AddItemScreen from "../screens/AddItemScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import HomeScreenNavigator from "./HomeScreenNavigator";
 import SearchNavigator from "./SearchNavigator";
 import AccountNavigator from "./AccountNavigator";
-import HomeNavigator from "./HomeNavigator";
+import HomeMainNavigator from "./HomeMainNavigator";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -15,7 +15,7 @@ const TabNavigator = () => (
   <Tab.Navigator screenOptions={{}}>
     <Tab.Screen
       name="Home"
-      component={HomeNavigator}
+      component={HomeMainNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="home" color={color} size={size} />
