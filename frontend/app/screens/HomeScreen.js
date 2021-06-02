@@ -38,58 +38,64 @@ function HomeScreen({ navigation }) {
 
   const categories = [
     {
+      backgroundColor: "#000000",
+      icon: "hexagon-multiple",
+      title: "All",
+      id: 1,
+    },
+    {
       backgroundColor: "#fc5c65",
       icon: "floor-lamp",
       title: "Furniture",
-      id: 1,
+      id: 2,
     },
     {
       backgroundColor: "#fd9644",
       icon: "car",
       title: "Cars",
-      id: 2,
+      id: 3,
     },
     {
       backgroundColor: "#fed330",
       icon: "camera",
       title: "Cameras",
-      id: 3,
+      id: 4,
     },
     {
       backgroundColor: "#26de81",
       icon: "cards",
       title: "Games",
-      id: 4,
+      id: 5,
     },
     {
       backgroundColor: "#2bcbba",
       icon: "shoe-heel",
       title: "Clothing",
-      id: 5,
+      id: 6,
     },
     {
       backgroundColor: "#45aaf2",
       icon: "basketball",
       title: "Sports",
-      id: 6,
+      id: 7,
     },
     {
       backgroundColor: "#4b7bec",
       icon: "headphones",
       title: "Movies & Music",
-      id: 7,
+      id: 8,
     },
     {
       backgroundColor: "#a55eea",
       icon: "book-open-variant",
       title: "Books",
-      id: 8,
+      id: 9,
     },
     {
       backgroundColor: "#778ca3",
       icon: "application",
       title: "Other",
-      id: 9,
+      id: 10,
     },
   ];
 
@@ -104,9 +110,11 @@ function HomeScreen({ navigation }) {
             data={categories}
             keyExtractor={(category) => category.id.toString()}
             numColumns={1}
+            
             renderItem={({ item }) => (
               <TouchableWithoutFeedback
                 onPress={() => {
+                
                 }}
               >
                 <View style={styles.category}>
@@ -143,7 +151,16 @@ function HomeScreen({ navigation }) {
           renderNavigationView={() => renderDrawer}
           >
             <View style={styles.home}>
+
+            <View style={styles.menu} backgroundColor="white">
+              <View style={styles.menuTitle}>
+                <Text style={styles.title}>Heart Marketplace</Text>
+              </View>
+            </View>
+
+
             <FlatList
+              style={styles.list}
                 data={productsToShow}
                 keyExtractor={(product) => product.id.toString()}
                 numColumns={1}
@@ -190,8 +207,9 @@ const styles = StyleSheet.create({
   },
 
   home: {
-    paddingTop: 20,
+    paddingTop: 29,
     alignItems: "center",
+    backgroundColor:"white"
   },
 
   productSection: {
@@ -207,10 +225,28 @@ const styles = StyleSheet.create({
   headerContainer: {
     padding: 10,
   },
+  menuTitle: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  list: {
+    marginBottom:50,
+  },
+  menu: {
+    padding: 10,
+    justifyContent: "flex-end",
+    flexDirection: "row",
+  },
+  
   headerText: {
     fontSize: 20,
     fontFamily: "serif",
   },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: colors.black,
+  }
 });
 
 export default HomeScreen;
