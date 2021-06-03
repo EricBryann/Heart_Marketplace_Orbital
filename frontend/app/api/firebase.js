@@ -7,6 +7,7 @@ import {
   REACT_APP_FIREBASE_STORAGE_BUCKET,
   REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   REACT_APP_FIREBASE_APP_ID,
+  REACT_APP_FIREBASE_URL
 } from "@env";
 
 const app = firebase.initializeApp({
@@ -16,6 +17,7 @@ const app = firebase.initializeApp({
   storageBucket: REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: REACT_APP_FIREBASE_APP_ID,
+  databaseURL: REACT_APP_FIREBASE_URL,
 });
 
 export const auth = app.auth();

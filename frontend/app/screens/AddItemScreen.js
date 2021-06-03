@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Button } from "react-native";
 import * as Yup from "yup";
 import AppFormField from "../components/form/AppFormField";
 import AppForm from "../components/form/AppForm";
@@ -8,6 +8,7 @@ import SubmitButton from "../components/SubmitButton";
 import AppFormImageField from "../components/form/AppFormImageField";
 import colors from "../config/colors";
 import CategoryOptionsField from "../components/form/CategoryOptionsField";
+import firebase from "firebase";
 
 function AddItemScreen(props) {
   const validationSchema = Yup.object().shape({
@@ -18,6 +19,21 @@ function AddItemScreen(props) {
     category: Yup.string().required().nullable().label("Category"),
     description: Yup.string().label("Description"),
   });
+
+  const handleValues = (title,quantity,price,category,description) => {
+    firebase.database().ref('Products/').set({
+      title,
+      quantity,
+      price,
+      category,
+      description
+    }).then((data)=>{
+      console.log('data ' , data)
+    }).catch((error)=>{
+      console.log('error ' , error)
+    })
+  };
+
   return (
     <Screen>
       <ScrollView style={styles.container}>
@@ -59,7 +75,7 @@ function AddItemScreen(props) {
             numberOfLines={5}
           />
           <View style={styles.button}>
-            <SubmitButton title="Add Item" />
+            <SubmitButton title="Add Item"/>
           </View>
         </AppForm>
       </ScrollView>
