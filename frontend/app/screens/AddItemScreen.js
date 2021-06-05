@@ -4,11 +4,13 @@ import * as Yup from "yup";
 import AppFormField from "../components/form/AppFormField";
 import AppForm from "../components/form/AppForm";
 import Screen from "../components/Screen";
-import SubmitButton from "../components/SubmitButton";
 import AppFormImageField from "../components/form/AppFormImageField";
 import colors from "../config/colors";
 import CategoryOptionsField from "../components/form/CategoryOptionsField";
 import firebase from "firebase";
+import { useFormikContext } from "formik";
+import SubmitButton from "../components/SubmitButton";
+
 
 function AddItemScreen(props) {
   const validationSchema = Yup.object().shape({
@@ -20,18 +22,22 @@ function AddItemScreen(props) {
     description: Yup.string().label("Description"),
   });
 
-  const handleValues = (title,quantity,price,category,description) => {
-    firebase.database().ref('Products/').set({
-      title,
-      quantity,
-      price,
-      category,
-      description
-    }).then((data)=>{
-      console.log('data ' , data)
-    }).catch((error)=>{
-      console.log('error ' , error)
-    })
+  const handleValues = async ({image,title,quantity,price,category,description}) => {
+    try {
+      const newReference = firebase.database().ref('/Products').push();
+      newReference
+      .set({
+        image: image,
+        title: title,
+        quantity: quantity,
+        price: price,
+        category: category,
+        description: description
+      })
+      .then(() => console.log('Data updated.'));
+    } catch (error) {
+      alert(error);
+    }
   };
 
   return (
@@ -44,9 +50,11 @@ function AddItemScreen(props) {
             quantity: "",
             price: "",
             category: "",
-            description: "",
+            description: ""
           }}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => {
+            handleValues
+          }}
           validationSchema={validationSchema}
         >
           <AppFormImageField name="images" />

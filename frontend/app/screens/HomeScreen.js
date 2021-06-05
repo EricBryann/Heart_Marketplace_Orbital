@@ -17,7 +17,6 @@ import { Ionicons } from "@expo/vector-icons";
 import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-
 import ListItem from "../components/list/ListItem";
 
 const products = getProducts();
@@ -103,6 +102,7 @@ function HomeScreen({ navigation }) {
     // outputs a value between 0 and 1
     console.log(status);
   };
+
 
   const renderDrawer = (
       <View style={styles.drawer}>
