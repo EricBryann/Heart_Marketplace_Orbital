@@ -10,10 +10,13 @@ import ImageInput from "../components/ImageInput";
 import colors from "../config/colors";
 import { auth } from "../api/firebase";
 import { Auth } from "../Auth/Auth";
+import firebase from "firebase";
 
 function SignUpScreen() {
+  
   const [imageUri, changeUri] = useState();
   const Authentication = useContext(Auth);
+
   const signUp = async (user) => {
     try {
       await auth.createUserWithEmailAndPassword(user.email, user.password);
@@ -29,6 +32,18 @@ function SignUpScreen() {
         photoURL: user.imageUri,
       });
       console.log(currentUser);
+      try {
+        const newReference = firebase.database().ref('/Users').push();
+        newReference
+        .set({
+          name: user.username,
+          email: user.email,
+          password: user.password
+        })
+        .then(() => console.log('Data updated.'));
+      } catch (error) {
+        alert(error);
+      }
     } catch (err) {
       alert(err);
     }

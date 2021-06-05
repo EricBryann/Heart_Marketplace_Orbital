@@ -21,8 +21,6 @@ import ListItem from "../components/list/ListItem";
 
 const products = getProducts();
 
-
-
 function HomeScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
   const [refresh, setRefresh] = useState(false);
