@@ -1,5 +1,5 @@
-import React from "react";
-import { View, StyleSheet, ScrollView, Button } from "react-native";
+import React, {useContext} from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
 import * as Yup from "yup";
 import AppFormField from "../components/form/AppFormField";
 import AppForm from "../components/form/AppForm";
@@ -8,6 +8,7 @@ import AppFormImageField from "../components/form/AppFormImageField";
 import colors from "../config/colors";
 import CategoryOptionsField from "../components/form/CategoryOptionsField";
 import firebase from "firebase";
+import { Auth } from "../Auth/Auth";
 import { useFormikContext } from "formik";
 import SubmitButton from "../components/SubmitButton";
 
@@ -17,22 +18,25 @@ function AddItemScreen(props) {
     images: Yup.array().min(1, "Please select at least 1 image"),
     title: Yup.string().required().min(1).label("Title"),
     quantity: Yup.number().positive().required().label("Quantity"),
-    minPrice: Yup.number().positive().required().label("Price"),
+    price: Yup.number().positive().required().label("Price"),
     category: Yup.string().required().nullable().label("Category"),
     description: Yup.string().label("Description"),
   });
 
-  const handleValues = async ({image,title,quantity,price,category,description}) => {
+  const Authentication = useContext(Auth);
+
+  const handleValues = async ({images,title,quantity,price,category,description}) => {
     try {
       const newReference = firebase.database().ref('/Products').push();
       newReference
       .set({
-        image: image,
+        images: images,
         title: title,
         quantity: quantity,
         price: price,
         category: category,
-        description: description
+        description: description,
+        uploader: Authentication.user.displayName
       })
       .then(() => console.log('Data updated.'));
     } catch (error) {
@@ -53,7 +57,7 @@ function AddItemScreen(props) {
             description: ""
           }}
           onSubmit={(values) => {
-            handleValues
+            handleValues(values);
           }}
           validationSchema={validationSchema}
         >
