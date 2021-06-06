@@ -1,60 +1,109 @@
-import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Image,
+  Dimensions,
+  Text,
+} from "react-native";
+import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import colors from "../config/colors";
+import ListItem from "./list/ListItem";
 
-function CardItem({
-  imageUri,
-  title,
-  price,
-  onPress,
-  width = 340,
-  height = 200,
-  titleFontSize = 18,
-}) {
+function FeedItem({ title, imageUri, onItemPress, ownerName, ownerImageUri }) {
+  const [like, setLike] = useState(false);
+  const likeHandler = () => {
+    setLike((prev) => !prev);
+  };
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View style={[styles.container, { width: width, height: height }]}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("../../assets/mypic.jpg")}
-            style={styles.image}
+    <>
+      <View style={styles.container}>
+        <View style={styles.innerContainer}>
+          <ListItem
+            marginLeft={-20}
+            title={ownerName}
+            imageUri={ownerImageUri}
+            onPress={() => console.log("Press owner")}
+            backgroundColor={colors.white}
           />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.price}>${price}</Text>
+          <View style={styles.border}>
+            <TouchableWithoutFeedback onPress={onItemPress}>
+              <Image style={styles.image} source={imageUri} />
+            </TouchableWithoutFeedback>
+            <View style={styles.details}>
+              <View style={styles.titleContainer}>
+                <TouchableWithoutFeedback onPress={onItemPress}>
+                  <Text style={styles.title}>{title}</Text>
+                </TouchableWithoutFeedback>
+              </View>
+              <View style={styles.likesContainer}>
+                <TouchableWithoutFeedback onPress={likeHandler}>
+                  {like ? (
+                    <MaterialCommunityIcons
+                      name="heart"
+                      size={28}
+                      color="red"
+                    />
+                  ) : (
+                    <FontAwesome name="heart-o" size={28} />
+                  )}
+                </TouchableWithoutFeedback>
+                <View style={styles.numberLikes}>
+                  <Text style={styles.numberLikesText}>17 Likes</Text>
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
-    borderWidth: 2,
+    alignItems: "center",
+    paddingBottom: 15,
+    // borderWidth: 1,
+    // marginHorizontal: 15,
+    // marginBottom: 10,
+  },
+  border: {
+    borderWidth: 1,
     borderRadius: 5,
   },
-  imageContainer: {
-    flex: 1,
-    overflow: "hidden",
-    marginBottom: 5,
+  innerContainer: {
+    width: "95%",
   },
   image: {
     width: "100%",
-    height: "100%",
+    height: Dimensions.get("window").width * 0.6,
+    overflow: "hidden",
+  },
+  likesContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+  },
+  numberLikes: {
+    justifyContent: "center",
+    paddingLeft: 10,
+  },
+  numberLikesText: {
+    fontSize: 16,
+  },
+  details: {
+    flexDirection: "row",
   },
   title: {
-    fontWeight: "bold",
-    paddingHorizontal: 5,
-    paddingVertical: 2,
+    fontSize: 19,
   },
-  price: {
-    color: colors.darkyellow,
-    paddingHorizontal: 5,
-    paddingVertical: 3,
+  titleContainer: {
+    paddingHorizontal: 10,
+    justifyContent: "center",
+    flex: 1,
   },
 });
 
-export default CardItem;
+export default FeedItem;

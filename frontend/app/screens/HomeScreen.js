@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -13,9 +13,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import colors from "../config/colors";
 import HomeItem from "../components/HomeItem";
 import { getProducts } from "../Auth/Auth";
-import { Ionicons } from "@expo/vector-icons";
-import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import ListItem from "../components/list/ListItem";
 
@@ -24,7 +23,7 @@ const products = getProducts();
 function HomeScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
   const [refresh, setRefresh] = useState(false);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState("all");
   const [productsToShow, setProductsToShow] = useState(products);
   const handleRefresh = () => {
     console.log("refresh");
@@ -101,81 +100,97 @@ function HomeScreen({ navigation }) {
     console.log(status);
   };
 
-
+  const drawer = useRef();
   const renderDrawer = (
-      <View style={styles.drawer}>
-          <FlatList
-            data={categories}
-            keyExtractor={(category) => category.id.toString()}
-            numColumns={1}
-            
-            renderItem={({ item }) => (
-              <TouchableWithoutFeedback
-                onPress={() => {
-                
-                }}
-              >
-                <View style={styles.category}>
-                  <MaterialCommunityIcons
-                    name={item.icon}
-                    size={50}
-                    color={item.backgroundColor}
-                  ></MaterialCommunityIcons>
-                  <Text>{item.title}</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            )}
-          />
-      </View>
+    <View style={styles.drawer}>
+      <FlatList
+        data={categories}
+        keyExtractor={(category) => category.id.toString()}
+        numColumns={1}
+        renderItem={({ item }) => (
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setInput(item.title.toLowerCase());
+              console.log(item.title);
+              drawer.current.closeDrawer();
+            }}
+          >
+            <View style={styles.category}>
+              <MaterialCommunityIcons
+                name={item.icon}
+                size={50}
+                color={item.backgroundColor}
+              ></MaterialCommunityIcons>
+              <Text>{item.title}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        )}
+      />
+    </View>
   );
 
   useEffect(() => {
+    if (input === "all") return setProductsToShow(products);
     setProductsToShow(
       products.filter((product) => {
-        return product.title.startsWith(input);
+        return product.tags.includes(input);
       })
     );
   }, [input]);
 
-
-
   return (
-    <View style = {styles.fl}>
-        <DrawerLayout
-          drawerBackgroundColor="white"
-          drawerWidth={100}
-          keyboardDismissMode="on-drag"
-          statusBarBackgroundColor="blue"
-          renderNavigationView={() => renderDrawer}
-          >
-            <View style={styles.home}>
-
-            <View style={styles.menu} backgroundColor="white">
-              <View style={styles.menuTitle}>
-                <Text style={styles.title}>Heart Marketplace</Text>
-              </View>
+    <View style={styles.fl}>
+      <DrawerLayout
+        ref={drawer}
+        drawerBackgroundColor="white"
+        drawerWidth={100}
+        keyboardDismissMode="on-drag"
+        statusBarBackgroundColor="blue"
+        renderNavigationView={() => renderDrawer}
+      >
+        <View style={styles.home}>
+          <View style={styles.menu} backgroundColor="white">
+            <View style={styles.menuTitle}>
+              <Text style={styles.title}>Heart Marketplace</Text>
             </View>
+            <View style={styles.chatIcon}>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate("Chat")}
+              >
+                <Ionicons
+                  name="chatbubble-ellipses-outline"
+                  color={colors.black}
+                  size={27}
+                />
+              </TouchableWithoutFeedback>
+            </View>
+          </View>
 
-
-            <FlatList
-              style={styles.list}
-                data={productsToShow}
-                keyExtractor={(product) => product.id.toString()}
-                numColumns={1}
-                renderItem={({ item }) => (
-                  <HomeItem
-                    title={item.title}
-                    price={item.price}
-                    onPress={() => navigation.navigate("SearchItemDetails", item)}
-                  />
-                )}
-                refreshing={refresh}
-                onRefresh={handleRefresh}
+          <FlatList
+            style={styles.list}
+            data={productsToShow}
+            keyExtractor={(product) => product.id.toString()}
+            numColumns={1}
+            renderItem={({ item }) => (
+              <HomeItem
+                title={item.title}
+                price={item.price}
+                imageUri={item.imageUri}
+                ownerName={item.ownerName}
+                onItemPress={() =>
+                  navigation.navigate("ItemPostedDetails", {
+                    ...item,
+                    withTradeButton: true,
+                  })
+                }
+                ownerImageUri={item.ownerImageUri}
               />
-            </View>
-
-        </DrawerLayout>
-
+            )}
+            refreshing={refresh}
+            onRefresh={handleRefresh}
+          />
+        </View>
+      </DrawerLayout>
     </View>
   );
 }
@@ -184,6 +199,9 @@ const styles = StyleSheet.create({
   fl: {
     flex: 1,
   },
+  chatIcon: {
+    marginRight: 5,
+  },
   drawer: {
     flexDirection: "row",
     paddingVertical: 25,
@@ -191,9 +209,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  category:{
-
-  },
+  category: {},
 
   container: {
     margin: 10,
@@ -206,8 +222,8 @@ const styles = StyleSheet.create({
 
   home: {
     paddingTop: 29,
-    alignItems: "center",
-    backgroundColor:"white"
+    // alignItems: "center",
+    backgroundColor: "white",
   },
 
   productSection: {
@@ -228,14 +244,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   list: {
-    marginBottom:50,
+    marginBottom: 50,
   },
   menu: {
     padding: 10,
     justifyContent: "flex-end",
     flexDirection: "row",
   },
-  
+
   headerText: {
     fontSize: 20,
     fontFamily: "serif",
@@ -244,7 +260,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     color: colors.black,
-  }
+  },
 });
 
 export default HomeScreen;

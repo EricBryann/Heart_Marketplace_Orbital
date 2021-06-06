@@ -32,7 +32,8 @@ function SearchScreen({ navigation }) {
   useEffect(() => {
     setProductsToShow(
       products.filter((product) => {
-        return product.title.startsWith(input);
+        if (input === "") return products;
+        return product.tags.includes(input.toLowerCase());
       })
     );
     setUsersToShow(
@@ -117,9 +118,8 @@ function SearchScreen({ navigation }) {
         <View style={styles.usersSection}>
           {usersToShow.map((user) => {
             return (
-              <View style={styles.userItem}>
+              <View style={styles.userItem} key={user.username}>
                 <ListItem
-                  key={user.username}
                   title={user.username}
                   subTitle={user.name}
                   imageUri={require("../../assets/mypic.jpg")}
