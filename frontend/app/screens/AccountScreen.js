@@ -14,51 +14,9 @@ import { Auth } from "../Auth/Auth";
 import { auth } from "../api/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
+import firebase from "firebase";
 
-const productsPosted = [
-  {
-    title: "Spectacle",
-    price: 10,
-    id: 1,
-    description: "bla3x",
-    quantity: 10,
-  },
-  {
-    title: "Pencil Case",
-    price: 20,
-    id: 2,
-    description: "bla3x",
-    quantity: 10,
-  },
-  {
-    title: "Chilli",
-    price: 5,
-    id: 3,
-    description: "bla3x",
-    quantity: 10,
-  },
-  {
-    title: "Spectacle",
-    price: 10,
-    id: 4,
-    description: "bla3x",
-    quantity: 10,
-  },
-  {
-    title: "Pencil Case",
-    price: 20,
-    id: 5,
-    description: "bla3x",
-    quantity: 10,
-  },
-  {
-    title: "Chilli",
-    price: 5,
-    id: 6,
-    description: "bla3x",
-    quantity: 10,
-  },
-];
+const productsPosted = [];
 
 function AccountScreen({ navigation }) {
   const [refresh, onRefresh] = useState(false);
@@ -66,7 +24,25 @@ function AccountScreen({ navigation }) {
   const handleRefresh = () => {
     console.log("refresh");
   };
+
   const Authentication = useContext(Auth);
+  var id = 1;
+  var products = firebase.database().ref('/Products');
+
+  products.on('value', (snapshot) => {
+    snapshot.forEach(snap => {
+      if (snap.val().uploader === Authentication.user.displayName) {
+        productsPosted.push({
+          title: snap.val().title,
+          price: snap.val().price,
+          id: id,
+          description: snap.val().description,
+          quantity: snap.val().quantity
+        });
+      }
+      id ++;
+    });
+  });
 
   return (
     <Screen style={styles.container}>
