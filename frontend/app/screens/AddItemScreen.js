@@ -36,10 +36,14 @@ function AddItemScreen(props) {
 
   const handleValues = async ({images,title,quantity,price,category,description}) => {
     try {
-      uploadImage(images[0], Authentication.user.displayName + title);
+      for (var i = 0; i < images.length; i ++) {
+        uploadImage(images[i], Authentication.user.displayName + title + i);
+      }
+      
       const newReference = firebase.database().ref('/Products').push();
       newReference
       .set({
+        imagenum: images.length,
         title: title,
         quantity: quantity,
         price: price,

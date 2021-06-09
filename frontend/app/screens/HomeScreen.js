@@ -18,7 +18,7 @@ import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import ListItem from "../components/list/ListItem";
 
-const products = getProducts();
+var products = getProducts();
 
 function HomeScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
@@ -26,6 +26,7 @@ function HomeScreen({ navigation }) {
   const [input, setInput] = useState("all");
   const [productsToShow, setProductsToShow] = useState(products);
   const handleRefresh = () => {
+    products = getProducts();
     console.log("refresh");
   };
   const handleChange = (character) => {
