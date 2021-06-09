@@ -22,15 +22,24 @@ function AddItemScreen(props) {
     category: Yup.string().required().nullable().label("Category"),
     description: Yup.string().label("Description"),
   });
-
+  
+  uploadImage = async (uri, name) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    var ref = firebase.storage().ref().child(name);
+    return ref.put(blob);
+  }
+  
+  
+  
   const Authentication = useContext(Auth);
 
   const handleValues = async ({images,title,quantity,price,category,description}) => {
     try {
+      uploadImage(images[0], Authentication.user.displayName + title);
       const newReference = firebase.database().ref('/Products').push();
       newReference
       .set({
-        images: images,
         title: title,
         quantity: quantity,
         price: price,
