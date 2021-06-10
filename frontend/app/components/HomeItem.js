@@ -29,7 +29,7 @@ function FeedItem({ title, imageUri, onItemPress, ownerName, ownerImageUri }) {
           />
           <View style={styles.border}>
             <TouchableWithoutFeedback onPress={onItemPress}>
-              <Image style={styles.image} source={imageUri} />
+              <Image style={styles.image} source={{uri: imageUri}} />
             </TouchableWithoutFeedback>
             <View style={styles.details}>
               <View style={styles.titleContainer}>

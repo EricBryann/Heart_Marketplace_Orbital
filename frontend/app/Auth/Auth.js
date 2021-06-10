@@ -1,5 +1,7 @@
 import { createContext } from "react";
+import { Image } from 'react-native';
 import firebase from "firebase";
+import defaultphoto from "../../assets/mypic.jpg"
 
 
 const Auth = createContext();
@@ -11,18 +13,36 @@ const getProducts = () => {
   var products = firebase.database().ref('/Products');
   products.on('value', (snapshot) => {
     snapshot.forEach(snap => {
-      initialValue.push({
-        imageUri: require("../../assets/mypic.jpg"),
-        title: snap.val().title,
-        quantity: snap.val().quantity,
-        price: snap.val().price,
-        id: id,
-        description: snap.val().description,
-        ownerName: snap.val().uploader,
-        ownerImageUri: require("../../assets/mypic.jpg"),
-        tags: snap.val().category
+      firebase.storage().ref('/' + snap.val().uploader + snap.val().title + '0').getDownloadURL().then((url) => {
+        initialValue.push({
+          imageUri: url,
+          title: snap.val().title,
+          quantity: snap.val().quantity,
+          price: snap.val().price,
+          id: id,
+          description: snap.val().description,
+          ownerName: snap.val().uploader,
+          ownerImageUri: require("../../assets/mypic.jpg"),
+          tags: snap.val().category
+        });
+        id ++;
+      })
+      .catch((e) => {
+        const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
+        initialValue.push({
+          imageUri: exampleImageUri,
+          title: snap.val().title,
+          quantity: snap.val().quantity,
+          price: snap.val().price,
+          id: id,
+          description: snap.val().description,
+          ownerName: snap.val().uploader,
+          ownerImageUri: require("../../assets/mypic.jpg"),
+          tags: snap.val().category
+        });
+        id ++;
       });
-      id ++;
+
     });
   });
 
