@@ -21,7 +21,7 @@ function CardItemDetailsScreen({ route }) {
       <View>
         <Image
           style={styles.image}
-          source={require("../../assets/mypic.jpg")}
+          source={{uri: itemDetails.imageUri}}
         />
       </View>
       <View style={styles.details}>

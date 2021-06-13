@@ -17,7 +17,7 @@ function CardItem({
       <View style={[styles.container, { width: width, height: height }]}>
         <View style={styles.imageContainer}>
           <Image
-            source={require("../../assets/mypic.jpg")}
+            source={{uri: imageUri}}
             style={styles.image}
           />
         </View>

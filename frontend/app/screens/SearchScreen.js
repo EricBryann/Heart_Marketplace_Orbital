@@ -98,6 +98,7 @@ function SearchScreen({ navigation }) {
             numColumns={2}
             renderItem={({ item }) => (
               <CardItem
+                imageUri={item.imageUri}
                 title={item.title}
                 price={item.price}
                 onPress={() =>

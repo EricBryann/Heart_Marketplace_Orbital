@@ -12,14 +12,16 @@ import colors from "../config/colors";
 import Screen from "../components/Screen";
 import { Auth } from "../Auth/Auth";
 import { auth } from "../api/firebase";
+import { getProducts } from "../Auth/Auth";
 import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
 import firebase from "firebase";
 
-const productsPosted = [];
+const products = getProducts();
 
 function AccountScreen({ navigation }) {
   const [refresh, onRefresh] = useState(false);
+  const [productsPosted, setProductPosted] = useState([]);
 
   const handleRefresh = () => {
     console.log("refresh");
@@ -27,22 +29,20 @@ function AccountScreen({ navigation }) {
 
   const Authentication = useContext(Auth);
   var id = 1;
-  var products = firebase.database().ref('/Products');
 
-  products.on('value', (snapshot) => {
-    snapshot.forEach(snap => {
-      if (snap.val().uploader === Authentication.user.displayName) {
-        productsPosted.push({
-          title: snap.val().title,
-          price: snap.val().price,
-          id: id,
-          description: snap.val().description,
-          quantity: snap.val().quantity
-        });
-      }
+  for (var i = 0; i < products.length; i ++) {
+    if (products[i].ownerName === Authentication.user.displayName) {
+      productsPosted.push({
+        imageUri: products[i].imageUri,
+        title: products[i].title,
+        price: products[i].price,
+        id: id,
+        description: products[i].description,
+        quantity: products[i].quantity
+      });
       id ++;
-    });
-  });
+    }
+  }
 
   return (
     <Screen style={styles.container}>
@@ -94,6 +94,7 @@ function AccountScreen({ navigation }) {
         numColumns={2}
         renderItem={({ item }) => (
           <CardItem
+            imageUri={item.imageUri}
             title={item.title}
             price={item.price}
             onPress={() => navigation.navigate("ItemPostedDetails", item)}
