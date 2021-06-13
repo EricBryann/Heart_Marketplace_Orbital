@@ -124,6 +124,12 @@ function SearchScreen({ navigation }) {
                   title={user.username}
                   subTitle={user.name}
                   imageUri={require("../../assets/mypic.jpg")}
+                  onPress={() =>
+                    navigation.navigate("SearchAccountDetails", {
+                      ...user,
+                      withTradeButton: true,
+                    })
+                  }
                 />
               </View>
             );

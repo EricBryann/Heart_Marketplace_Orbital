@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "../screens/SearchScreen";
 import CardItemDetailsScreen from "../screens/CardItemDetailsScreen";
+import SearchAccountScreen from "../screens/SearchAccountScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,11 @@ const StackNavigator = () => {
       <Stack.Screen
         name="SearchItemDetails"
         component={CardItemDetailsScreen}
+        options={{ headerTitle: "" }}
+      />
+      <Stack.Screen
+        name="SearchAccountDetails"
+        component={SearchAccountScreen}
         options={{ headerTitle: "" }}
       />
     </Stack.Navigator>

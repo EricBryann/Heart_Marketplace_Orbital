@@ -23,7 +23,7 @@ const getProducts = () => {
           description: snap.val().description,
           ownerName: snap.val().uploader,
           ownerImageUri: require("../../assets/mypic.jpg"),
-          tags: snap.val().category
+          tags: snap.val().category.toLowerCase()
         });
         id ++;
       })
