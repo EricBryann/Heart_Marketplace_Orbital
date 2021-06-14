@@ -126,8 +126,7 @@ function SearchScreen({ navigation }) {
                   imageUri={require("../../assets/mypic.jpg")}
                   onPress={() =>
                     navigation.navigate("SearchAccountDetails", {
-                      ...user,
-                      withTradeButton: true,
+                      ...user
                     })
                   }
                 />
