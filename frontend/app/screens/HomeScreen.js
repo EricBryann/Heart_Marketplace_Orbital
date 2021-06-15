@@ -15,18 +15,63 @@ import HomeItem from "../components/HomeItem";
 import { getProducts } from "../Auth/Auth";
 import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import firebase from "firebase";
+import defaultphoto from "../../assets/blank_pp.png"
 
 import ListItem from "../components/list/ListItem";
-
-var products = getProducts();
 
 function HomeScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
   const [refresh, setRefresh] = useState(false);
   const [input, setInput] = useState("all");
-  const [productsToShow, setProductsToShow] = useState(products);
+  const [productsToShow, setProductsToShow] = useState([]);
+
+  const getProductsToShow = () => {
+    const initialValue = [];
+    var id = 1;
+  
+    var products = firebase.database().ref('/Products');
+    products.on('value', (snapshot) => {
+      snapshot.forEach(snap => {
+        firebase.storage().ref('/' + snap.val().uploader + snap.val().title + '0').getDownloadURL().then((url) => {
+          initialValue.push({
+            imageUri: url,
+            title: snap.val().title,
+            quantity: snap.val().quantity,
+            price: snap.val().price,
+            id: id,
+            description: snap.val().description,
+            ownerName: snap.val().uploader,
+            ownerImageUri: require("../../assets/mypic.jpg"),
+            tags: snap.val().category.toLowerCase()
+          });
+          setProductsToShow(initialValue);
+          id ++;
+        })
+        .catch((e) => {
+          const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
+          initialValue.push({
+            imageUri: exampleImageUri,
+            title: snap.val().title,
+            quantity: snap.val().quantity,
+            price: snap.val().price,
+            id: id,
+            description: snap.val().description,
+            ownerName: snap.val().uploader,
+            ownerImageUri: require("../../assets/mypic.jpg"),
+            tags: snap.val().category
+          });
+          setProductsToShow(initialValue);
+          id ++;
+        });
+      });
+    });
+  }
+
+  useEffect(() => {getProductsToShow()}, []);
+
   const handleRefresh = () => {
-    products = getProducts();
+    getProductsToShow();
     console.log("refresh");
   };
   const handleChange = (character) => {
@@ -130,13 +175,15 @@ function HomeScreen({ navigation }) {
     </View>
   );
 
+  const catHelper = (input) => {
+    if (input === "all") return productsToShow;
+    productsToShow.filter((product) => {
+      return product.tags.includes(input);
+    });
+  }
+
   useEffect(() => {
-    if (input === "all") return setProductsToShow(products);
-    setProductsToShow(
-      products.filter((product) => {
-        return product.tags.includes(input);
-      })
-    );
+    catHelper(input);
   }, [input]);
 
   return (
