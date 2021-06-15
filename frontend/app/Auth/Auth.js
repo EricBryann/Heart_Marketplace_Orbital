@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { Image } from "react-native";
 import firebase from "firebase";
-import defaultphoto from "../../assets/blank_pp.png"
+import defaultphoto from "../../assets/blank_pp.png";
 
 const Auth = createContext();
 
@@ -25,7 +25,7 @@ const getProducts = () => {
             id: id,
             description: snap.val().description,
             ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
+            ownerImageUri: require("../../assets/blank_pp.png"),
             tags: snap.val().category.toLowerCase(),
           });
           id++;
@@ -40,7 +40,7 @@ const getProducts = () => {
             id: id,
             description: snap.val().description,
             ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
+            ownerImageUri: require("../../assets/blank_pp.png"),
             tags: snap.val().category,
           });
           id++;
