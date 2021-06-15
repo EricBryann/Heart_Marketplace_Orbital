@@ -85,10 +85,20 @@ function SearchScreen({ navigation }) {
   };
 
   useEffect(() => {
+    setProductsToShow(
+      productsToShow.filter((product) => {
+        if (input === "") return getProductsToShow();
+        if (product) {
+          return product.title.startsWith(input);
+        }
+      })
+    );
     setUsersToShow(
       users.filter((user) => {
         if (input === "") return null;
-        return user.username.startsWith(input);
+        if (user) {
+          return user.username.startsWith(input);
+        }
       })
     );
   }, [input]);
