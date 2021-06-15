@@ -13,29 +13,74 @@ import colors from "../config/colors";
 import CardItem from "../components/CardItem";
 import { getProducts, getUsers } from "../Auth/Auth";
 import ListItem from "../components/list/ListItem";
+import firebase from "firebase";
+import defaultphoto from "../../assets/blank_pp.png"
 
-const products = getProducts();
+
 const users = getUsers();
 
 function SearchScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
   const [refresh, setRefresh] = useState(false);
   const [input, setInput] = useState("");
-  const [productsToShow, setProductsToShow] = useState(products);
+  const [productsToShow, setProductsToShow] = useState([]);
   const [usersToShow, setUsersToShow] = useState(users);
+
+
+  const getProductsToShow = () => {
+    const initialValue = [];
+    var id = 1;
+  
+    var products = firebase.database().ref('/Products');
+    products.on('value', (snapshot) => {
+      snapshot.forEach(snap => {
+        firebase.storage().ref('/' + snap.val().uploader + snap.val().title + '0').getDownloadURL().then((url) => {
+          initialValue.push({
+            imageUri: url,
+            title: snap.val().title,
+            quantity: snap.val().quantity,
+            price: snap.val().price,
+            id: id,
+            description: snap.val().description,
+            ownerName: snap.val().uploader,
+            ownerImageUri: require("../../assets/mypic.jpg"),
+            tags: snap.val().category.toLowerCase()
+          });
+          setProductsToShow(initialValue);
+          id ++;
+        })
+        .catch((e) => {
+          const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
+          initialValue.push({
+            imageUri: exampleImageUri,
+            title: snap.val().title,
+            quantity: snap.val().quantity,
+            price: snap.val().price,
+            id: id,
+            description: snap.val().description,
+            ownerName: snap.val().uploader,
+            ownerImageUri: require("../../assets/mypic.jpg"),
+            tags: snap.val().category
+          });
+          setProductsToShow(initialValue);
+          id ++;
+        });
+      });
+    });
+  }
+
+  useEffect(() => {getProductsToShow()}, []);
+
   const handleRefresh = () => {
+    getProductsToShow();
     console.log("refresh");
   };
+
   const handleChange = (character) => {
     setInput(character);
   };
+
   useEffect(() => {
-    setProductsToShow(
-      products.filter((product) => {
-        if (input === "") return products;
-        return product.tags.includes(input.toLowerCase());
-      })
-    );
     setUsersToShow(
       users.filter((user) => {
         if (input === "") return null;
