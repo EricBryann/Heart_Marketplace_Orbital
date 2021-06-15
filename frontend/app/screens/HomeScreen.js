@@ -30,41 +30,6 @@ function HomeScreen({ navigation }) {
     const initialValue = [];
     var id = 1;
 
-<<<<<<< HEAD
-    var ref = firebase.database().ref("/Products");
-    var query = (input !== "All" ? ref.orderByChild("category").equalTo(input) : ref);
-    
-    query.once("value", function(snapshot) {
-      snapshot.forEach(function(snap) {
-        firebase.storage().ref('/' + snap.val().uploader + snap.val().title + '0').getDownloadURL().then((url) => {
-          initialValue.push({
-            imageUri: url,
-            title: snap.val().title,
-            quantity: snap.val().quantity,
-            price: snap.val().price,
-            id: id,
-            description: snap.val().description,
-            ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
-            tags: snap.val().category
-          });
-          setProductsToShow(initialValue);
-          console.log(initialValue.length);
-          id ++;
-        })
-        .catch((e) => {
-          const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
-          initialValue.push({
-            imageUri: exampleImageUri,
-            title: snap.val().title,
-            quantity: snap.val().quantity,
-            price: snap.val().price,
-            id: id,
-            description: snap.val().description,
-            ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
-            tags: snap.val().category
-=======
     var products = firebase.database().ref("/Products");
     products.on("value", (snapshot) => {
       snapshot.forEach((snap) => {
@@ -102,7 +67,6 @@ function HomeScreen({ navigation }) {
             });
             setProductsToShow(initialValue);
             id++;
->>>>>>> 4643a81ea013e74a5d917bb1963b9349582aaaa0
           });
       });
     });
@@ -174,7 +138,7 @@ function HomeScreen({ navigation }) {
         data={categories}
         keyExtractor={(category) => category.id.toString()}
         numColumns={1}
-        renderItem={({ item }) => ( 
+        renderItem={({ item }) => (
           <TouchableWithoutFeedback
             onPress={() => {
               setInput(item.title);
@@ -196,8 +160,6 @@ function HomeScreen({ navigation }) {
     </View>
   );
 
-<<<<<<< HEAD
-=======
   const catHelper = (input) => {
     if (input === "all") return productsToShow;
     productsToShow.filter((product) => {
@@ -209,7 +171,6 @@ function HomeScreen({ navigation }) {
     catHelper(input);
   }, [input]);
 
->>>>>>> 4643a81ea013e74a5d917bb1963b9349582aaaa0
   return (
     <View style={styles.fl}>
       <DrawerLayout

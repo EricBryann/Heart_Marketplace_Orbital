@@ -29,28 +29,6 @@ const DrawerNavigator = () => {
           }}
         />
         <Drawer.Screen
-          name="Edit Profile"
-          component={EditScreen}
-          options={{
-            drawerIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account-edit"
-                color={color}
-                size={size}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="My Likes"
-          component={MyLikesScreen}
-          options={{
-            drawerIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="heart" color={color} size={size} />
-            ),
-          }}
-        />
-        <Drawer.Screen
           name="Log Out"
           component={LogoutScreen}
           options={{
