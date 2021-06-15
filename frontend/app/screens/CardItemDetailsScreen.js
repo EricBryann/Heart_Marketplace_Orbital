@@ -13,6 +13,11 @@ function CardItemDetailsScreen({ route }) {
   const handleLike = () => {
     setIsLiked((prev) => !prev);
   };
+
+  const handleTrade = () => {
+    
+  };
+
   return (
     <ScrollView>
       <View style={styles.titleContainer}>
@@ -42,7 +47,10 @@ function CardItemDetailsScreen({ route }) {
                 <AppButton
                   width="40%"
                   title="Trade"
-                  onPress={() => console.log("trade " + itemDetails.id)}
+                  onPress={() => {
+                    console.log("trade " + itemDetails.id);
+                    handleTrade();
+                  }}
                   fontSize={18}
                 />
               )}

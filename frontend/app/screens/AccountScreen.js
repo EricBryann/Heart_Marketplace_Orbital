@@ -71,9 +71,7 @@ function AccountScreen({ navigation }) {
     });
   };
 
-  useEffect(() => {
-    getAccountProducts();
-  }, []);
+  useEffect(() => {getAccountProducts()}, []);
 
   return (
     <Screen style={styles.container}>
