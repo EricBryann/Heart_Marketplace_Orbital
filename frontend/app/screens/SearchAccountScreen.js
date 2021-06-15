@@ -165,10 +165,6 @@ function SearchAccountScreen({ route }) {
                         onPress={followButton}
                     />
                 </View>
-                <View>
-                  <Text style={styles.sectionHeaderText}>Followers</Text>
-                  <Text style={styles.sectionBodyText}>1000</Text>
-                </View>
                 <View style={styles.horizontalLine}></View>
                 <View style={styles.productSection}></View>
               </ScrollView>
