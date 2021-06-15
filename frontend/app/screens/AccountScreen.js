@@ -22,12 +22,13 @@ function AccountScreen({ navigation }) {
   const [productsPosted, setProductPosted] = useState([]);
 
   const handleRefresh = () => {
+    getAccountProducts();
     console.log("refresh");
   };
 
   const Authentication = useContext(Auth);
 
-  useEffect(() => {
+  const getAccountProducts = () => {
     const temp = [];
     var ref = firebase.database().ref("/Products");
     var query = ref.orderByChild("uploader").equalTo(Authentication.user.displayName);
@@ -43,7 +44,6 @@ function AccountScreen({ navigation }) {
                   description: child.val().description,
                   quantity: child.val().quantity
                 });
-                console.log(productsPosted.length);
                 setProductPosted(temp);
               })
               .catch((e) => {
@@ -61,7 +61,9 @@ function AccountScreen({ navigation }) {
               id ++;
         });
     });
-  }, [])
+  }
+
+  useEffect(() => {getAccountProducts()}, [])
 
 
   return (

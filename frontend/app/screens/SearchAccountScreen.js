@@ -24,7 +24,7 @@ function SearchAccountScreen({ route }) {
     const [refresh, onRefresh] = useState(false);
     const [productsPosted, setProductPosted] = useState([]);
 
-    useEffect(() => {
+    const getAccountProducts = () => {
       const temp = [];
       var ref = firebase.database().ref("/Products");
       var query = ref.orderByChild("uploader").equalTo(accountDetails.username);
@@ -57,10 +57,13 @@ function SearchAccountScreen({ route }) {
                 id ++;
           });
       });
-    }, [])
+    }
+
+    useEffect(() => {getAccountProducts()}, [])
 
     const handleRefresh = () => {
-        console.log("refresh");
+      getAccountProducts();
+      console.log("refresh");
     };
     return (
         <Screen style={styles.container}>
