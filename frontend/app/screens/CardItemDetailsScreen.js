@@ -7,16 +7,15 @@ import AppButton from "../components/AppButton";
 
 function CardItemDetailsScreen({ route }) {
   const itemDetails = route.params;
-  const withTradeButton = route.params.withTradeButton;
+  // const withTradeButton = route.params.withTradeButton;
+  const withTradeButton = false;
   const [isLiked, setIsLiked] = useState(false);
   const [trade, setTrade] = useState(false);
   const handleLike = () => {
     setIsLiked((prev) => !prev);
   };
 
-  const handleTrade = () => {
-    
-  };
+  const handleTrade = () => {};
 
   return (
     <ScrollView>
@@ -24,10 +23,7 @@ function CardItemDetailsScreen({ route }) {
         <Text style={styles.title}>{itemDetails.title}</Text>
       </View>
       <View>
-        <Image
-          style={styles.image}
-          source={{uri: itemDetails.imageUri}}
-        />
+        <Image style={styles.image} source={{ uri: itemDetails.imageUri }} />
       </View>
       <View style={styles.details}>
         <View style={styles.tradePriceContainer}>
