@@ -89,7 +89,7 @@ function AccountScreen({ navigation }) {
             <View style={styles.topContainer}>
               <Image
                 style={styles.image}
-                source={require("../../assets/mypic.jpg")}
+                source={require("../../assets/blank_pp.png")}
               />
               <View style={styles.detailSection}>
                 <View>

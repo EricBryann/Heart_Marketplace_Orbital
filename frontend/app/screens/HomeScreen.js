@@ -49,7 +49,7 @@ function HomeScreen({ navigation }) {
               id: id,
               description: snap.val().description,
               ownerName: snap.val().uploader,
-              ownerImageUri: require("../../assets/mypic.jpg"),
+              ownerImageUri: require("../../assets/blank_pp.png"),
               tags: snap.val().category,
             });
             setProductsToShow(initialValue);
@@ -66,7 +66,7 @@ function HomeScreen({ navigation }) {
               id: id,
               description: snap.val().description,
               ownerName: snap.val().uploader,
-              ownerImageUri: require("../../assets/mypic.jpg"),
+              ownerImageUri: require("../../assets/blank_pp.png"),
               tags: snap.val().category,
             });
           });

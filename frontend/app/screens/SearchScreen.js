@@ -59,7 +59,7 @@ function SearchScreen({ navigation }) {
             id: id,
             description: snap.val().description,
             ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
+            ownerImageUri: require("../../assets/blank_pp.png"),
             tags: snap.val().category
           });
           setProductsToShow(initialValue);
@@ -168,7 +168,7 @@ function SearchScreen({ navigation }) {
                 <ListItem
                   title={user.username}
                   subTitle={user.name}
-                  imageUri={require("../../assets/mypic.jpg")}
+                  imageUri={require("../../assets/blank_pp.png")}
                   onPress={() =>
                     navigation.navigate("SearchAccountDetails", {
                       ...user,
