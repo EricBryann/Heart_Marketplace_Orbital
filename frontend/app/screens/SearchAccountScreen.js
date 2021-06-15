@@ -16,7 +16,7 @@ import { auth } from "../api/firebase";
 import { getProductsByUser } from "../Auth/Auth";
 import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
-import defaultphoto from "../../assets/mypic.jpg"
+import defaultphoto from "../../assets/blank_pp.png";
 import firebase from "firebase";
 
 function SearchAccountScreen({ route }) {
@@ -83,10 +83,13 @@ function SearchAccountScreen({ route }) {
                 });
                 id ++;
           });
+        id++;
       });
     };
 
-    useEffect(() => {getAccountProducts()}, []);
+  useEffect(() => {
+    getAccountProducts();
+  }, []);
 
     const handleRefresh = () => {
       checkFollow();
@@ -162,11 +165,9 @@ function SearchAccountScreen({ route }) {
                         onPress={followButton}
                     />
                 </View>
-                <View style={styles.userDetailsContainer}>
-                  <Text style={styles.username}>
-                    {accountDetails.username}
-                  </Text>
-                  <Text style={styles.userEmail}>{accountDetails.email}</Text>
+                <View>
+                  <Text style={styles.sectionHeaderText}>Followers</Text>
+                  <Text style={styles.sectionBodyText}>1000</Text>
                 </View>
                 <View style={styles.horizontalLine}></View>
                 <View style={styles.productSection}></View>
@@ -193,78 +194,78 @@ function SearchAccountScreen({ route }) {
   }
 
 const styles = StyleSheet.create({
-    button: {
-        marginLeft: 200,
-        marginRight: 20
-    },
-    animatedBox: {
-      marginTop: 50,
-      flex: 1,
-      backgroundColor: "green",
-    },
-    container: {
-      backgroundColor: colors.white,
-      zIndex: 0,
-      flex: 1,
-    },
-    profile: {
-      marginBottom: 20,
-    },
-    image: {
-      width: 90,
-      height: 90,
-      borderRadius: 45,
-    },
-    topContainer: {
-      flexDirection: "row",
-      height: 110,
-      alignItems: "center",
-      paddingLeft: 15,
-    },
-    username: {
-      fontWeight: "bold",
-      fontSize: 18,
-    },
-    userEmail: {},
-    userDetailsContainer: {
-      paddingHorizontal: 10,
-    },
-    detailSection: {
-      flex: 1,
-      flexDirection: "row",
-      justifyContent: "space-around",
-    },
-    sectionHeaderText: {
-      fontSize: 15,
-      fontWeight: "bold",
-    },
-    sectionBodyText: {
-      textAlign: "center",
-    },
-    menu: {
-      padding: 10,
-      justifyContent: "flex-end",
-      flexDirection: "row",
-    },
-    menuTitle: {
-      flex: 1,
-      justifyContent: "center",
-    },
-    title: {
-      fontWeight: "bold",
-      fontSize: 20,
-      color: colors.black,
-    },
-    horizontalLine: {
-      width: "100%",
-      height: 1,
-      backgroundColor: colors.lightgrey,
-      marginTop: 10,
-    },
-    row: {
-      flex: 1,
-      justifyContent: "space-between",
-    },
-  });
+  button: {
+    marginLeft: 200,
+    marginRight: 20,
+  },
+  animatedBox: {
+    marginTop: 50,
+    flex: 1,
+    backgroundColor: "green",
+  },
+  container: {
+    backgroundColor: colors.white,
+    zIndex: 0,
+    flex: 1,
+  },
+  profile: {
+    marginBottom: 20,
+  },
+  image: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+  },
+  topContainer: {
+    flexDirection: "row",
+    height: 110,
+    alignItems: "center",
+    paddingLeft: 15,
+  },
+  username: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  userEmail: {},
+  userDetailsContainer: {
+    paddingHorizontal: 10,
+  },
+  detailSection: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  sectionHeaderText: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  sectionBodyText: {
+    textAlign: "center",
+  },
+  menu: {
+    padding: 10,
+    justifyContent: "flex-end",
+    flexDirection: "row",
+  },
+  menuTitle: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: colors.black,
+  },
+  horizontalLine: {
+    width: "100%",
+    height: 1,
+    backgroundColor: colors.lightgrey,
+    marginTop: 10,
+  },
+  row: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+});
 
 export default SearchAccountScreen;
