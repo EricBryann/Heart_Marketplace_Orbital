@@ -30,9 +30,12 @@ function HomeScreen({ navigation }) {
     const initialValue = [];
     var id = 1;
 
-    var products = firebase.database().ref("/Products");
-    products.on("value", (snapshot) => {
-      snapshot.forEach((snap) => {
+    var ref = firebase.database().ref("/Products");
+    var query =
+      input !== "All" ? ref.orderByChild("category").equalTo(input) : ref;
+
+    query.once("value", function (snapshot) {
+      snapshot.forEach(function (snap) {
         firebase
           .storage()
           .ref("/" + snap.val().uploader + snap.val().title + "0")
@@ -47,9 +50,10 @@ function HomeScreen({ navigation }) {
               description: snap.val().description,
               ownerName: snap.val().uploader,
               ownerImageUri: require("../../assets/mypic.jpg"),
-              tags: snap.val().category.toLowerCase(),
+              tags: snap.val().category,
             });
             setProductsToShow(initialValue);
+            console.log(initialValue.length);
             id++;
           })
           .catch((e) => {
@@ -65,8 +69,6 @@ function HomeScreen({ navigation }) {
               ownerImageUri: require("../../assets/mypic.jpg"),
               tags: snap.val().category,
             });
-            setProductsToShow(initialValue);
-            id++;
           });
       });
     });
@@ -159,17 +161,6 @@ function HomeScreen({ navigation }) {
       />
     </View>
   );
-
-  const catHelper = (input) => {
-    if (input === "all") return productsToShow;
-    productsToShow.filter((product) => {
-      return product.tags.includes(input);
-    });
-  };
-
-  useEffect(() => {
-    catHelper(input);
-  }, [input]);
 
   return (
     <View style={styles.fl}>
