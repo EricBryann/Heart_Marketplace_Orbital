@@ -13,7 +13,7 @@ import colors from "../config/colors";
 import Screen from "../components/Screen";
 import { Auth } from "../Auth/Auth";
 import { auth } from "../api/firebase";
-import { getProducts } from "../Auth/Auth";
+import { getProductsByUser } from "../Auth/Auth";
 import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
 import defaultphoto from "../../assets/mypic.jpg"
@@ -24,42 +24,40 @@ function SearchAccountScreen({ route }) {
     const [refresh, onRefresh] = useState(false);
     const [productsPosted, setProductPosted] = useState([]);
 
-    const updateVal = () => {
-        var ref = firebase.database().ref("/Products");
-        var query = ref.orderByChild("uploader").equalTo(accountDetails.username);
-        var id = 1;
-        var temp = [];
-        query.once("value", function(snapshot) {
-            snapshot.forEach(function(child) {
-                firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
-                    temp.push({
-                      imageUri: url,
-                      title: child.val().title,
-                      price: child.val().price,
-                      id: id,
-                      description: child.val().description,
-                      quantity: child.val().quantity
-                    });
-                  })
-                  .catch((e) => {
-                    const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
-                    temp.push({
-                      imageUri: exampleImageUri,
-                      title: child.val().title,
-                      price: child.val().price,
-                      id: id,
-                      description: child.val().description,
-                      quantity: child.val().quantity
-                    });
+    useEffect(() => {
+      const temp = [];
+      var ref = firebase.database().ref("/Products");
+      var query = ref.orderByChild("uploader").equalTo(accountDetails.username);
+      var id = 1;
+      query.once("value", function(snapshot) {
+          snapshot.forEach(function(child) {
+              firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
+                  temp.push({
+                    imageUri: url,
+                    title: child.val().title,
+                    price: child.val().price,
+                    id: id,
+                    description: child.val().description,
+                    quantity: child.val().quantity
                   });
-                  id ++;
-            });
-        });
-        console.log(id);
-        setProductPosted(temp);
-    }
-    
-    useEffect(() => {updateVal()}, []);
+                  setProductPosted(temp);
+                })
+                .catch((e) => {
+                  const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
+                  temp.push({
+                    imageUri: exampleImageUri,
+                    title: child.val().title,
+                    price: child.val().price,
+                    id: id,
+                    description: child.val().description,
+                    quantity: child.val().quantity
+                  });
+                  setProductPosted(temp);
+                });
+                id ++;
+          });
+      });
+    }, [])
 
     const handleRefresh = () => {
         console.log("refresh");

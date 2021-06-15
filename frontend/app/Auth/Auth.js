@@ -49,6 +49,41 @@ const getProducts = () => {
   return initialValue;
 };
 
+const getProductsByUser = (user, _callback) => {
+  const temp = [];
+  var ref = firebase.database().ref("/Products");
+  var query = ref.orderByChild("uploader").equalTo(user.username);
+  var id = 1;
+  query.once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+          firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
+            temp.push({
+                imageUri: url,
+                title: child.val().title,
+                price: child.val().price,
+                id: id,
+                description: child.val().description,
+                quantity: child.val().quantity
+              });
+            })
+            .catch((e) => {
+              const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
+              temp.push({
+                imageUri: exampleImageUri,
+                title: child.val().title,
+                price: child.val().price,
+                id: id,
+                description: child.val().description,
+                quantity: child.val().quantity
+              });
+            });
+            id ++;
+      });
+  });
+  _callback(temp);
+};
+
+
 const getUsers = () => {
   const initialValue = [];
 
@@ -67,4 +102,4 @@ const getUsers = () => {
   return initialValue;
 };
 
-export { Auth, getProducts, getUsers };
+export { Auth, getProducts, getProductsByUser, getUsers };

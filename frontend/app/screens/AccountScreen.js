@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -12,12 +12,10 @@ import colors from "../config/colors";
 import Screen from "../components/Screen";
 import { Auth } from "../Auth/Auth";
 import { auth } from "../api/firebase";
-import { getProducts } from "../Auth/Auth";
+import { getProductsByUser } from "../Auth/Auth";
 import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
 import firebase from "firebase";
-
-const products = getProducts();
 
 function AccountScreen({ navigation }) {
   const [refresh, onRefresh] = useState(false);
@@ -28,21 +26,43 @@ function AccountScreen({ navigation }) {
   };
 
   const Authentication = useContext(Auth);
-  var id = 1;
 
-  for (var i = 0; i < products.length; i ++) {
-    if (products[i].ownerName === Authentication.user.displayName) {
-      productsPosted.push({
-        imageUri: products[i].imageUri,
-        title: products[i].title,
-        price: products[i].price,
-        id: id,
-        description: products[i].description,
-        quantity: products[i].quantity
-      });
-      id ++;
-    }
-  }
+  useEffect(() => {
+    const temp = [];
+    var ref = firebase.database().ref("/Products");
+    var query = ref.orderByChild("uploader").equalTo(Authentication.user.displayName);
+    var id = 1;
+    query.once("value", function(snapshot) {
+        snapshot.forEach(function(child) {
+            firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
+                temp.push({
+                  imageUri: url,
+                  title: child.val().title,
+                  price: child.val().price,
+                  id: id,
+                  description: child.val().description,
+                  quantity: child.val().quantity
+                });
+                console.log(productsPosted.length);
+                setProductPosted(temp);
+              })
+              .catch((e) => {
+                const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
+                temp.push({
+                  imageUri: exampleImageUri,
+                  title: child.val().title,
+                  price: child.val().price,
+                  id: id,
+                  description: child.val().description,
+                  quantity: child.val().quantity
+                });
+                setProductPosted(temp);
+              });
+              id ++;
+        });
+    });
+  }, [])
+
 
   return (
     <Screen style={styles.container}>
