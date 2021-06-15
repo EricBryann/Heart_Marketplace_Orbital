@@ -30,7 +30,6 @@ function HomeScreen({ navigation }) {
     const initialValue = [];
     var id = 1;
 
-<<<<<<< HEAD
     var ref = firebase.database().ref("/Products");
     var query = (input !== "All" ? ref.orderByChild("category").equalTo(input) : ref);
     
@@ -64,49 +63,11 @@ function HomeScreen({ navigation }) {
             ownerName: snap.val().uploader,
             ownerImageUri: require("../../assets/mypic.jpg"),
             tags: snap.val().category
-=======
-    var products = firebase.database().ref("/Products");
-    products.on("value", (snapshot) => {
-      snapshot.forEach((snap) => {
-        firebase
-          .storage()
-          .ref("/" + snap.val().uploader + snap.val().title + "0")
-          .getDownloadURL()
-          .then((url) => {
-            initialValue.push({
-              imageUri: url,
-              title: snap.val().title,
-              quantity: snap.val().quantity,
-              price: snap.val().price,
-              id: id,
-              description: snap.val().description,
-              ownerName: snap.val().uploader,
-              ownerImageUri: require("../../assets/mypic.jpg"),
-              tags: snap.val().category.toLowerCase(),
-            });
-            setProductsToShow(initialValue);
-            id++;
-          })
-          .catch((e) => {
-            const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri;
-            initialValue.push({
-              imageUri: exampleImageUri,
-              title: snap.val().title,
-              quantity: snap.val().quantity,
-              price: snap.val().price,
-              id: id,
-              description: snap.val().description,
-              ownerName: snap.val().uploader,
-              ownerImageUri: require("../../assets/mypic.jpg"),
-              tags: snap.val().category,
-            });
-            setProductsToShow(initialValue);
-            id++;
->>>>>>> 4643a81ea013e74a5d917bb1963b9349582aaaa0
           });
       });
     });
-  };
+  });
+}
 
   useEffect(() => {
     getProductsToShow();
@@ -196,20 +157,6 @@ function HomeScreen({ navigation }) {
     </View>
   );
 
-<<<<<<< HEAD
-=======
-  const catHelper = (input) => {
-    if (input === "all") return productsToShow;
-    productsToShow.filter((product) => {
-      return product.tags.includes(input);
-    });
-  };
-
-  useEffect(() => {
-    catHelper(input);
-  }, [input]);
-
->>>>>>> 4643a81ea013e74a5d917bb1963b9349582aaaa0
   return (
     <View style={styles.fl}>
       <DrawerLayout
