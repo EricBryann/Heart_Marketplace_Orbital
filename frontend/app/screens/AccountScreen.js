@@ -28,43 +28,51 @@ function AccountScreen({ navigation }) {
 
   const Authentication = useContext(Auth);
 
-  const getAccountProducts = () => {
+  const getAccountProducts = async () => {
     const temp = [];
     var ref = firebase.database().ref("/Products");
-    var query = ref.orderByChild("uploader").equalTo(Authentication.user.displayName);
+    var query = ref
+      .orderByChild("uploader")
+      .equalTo(Authentication.user.displayName);
     var id = 1;
-    query.once("value", function(snapshot) {
-        snapshot.forEach(function(child) {
-            firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
-                temp.push({
-                  imageUri: url,
-                  title: child.val().title,
-                  price: child.val().price,
-                  id: id,
-                  description: child.val().description,
-                  quantity: child.val().quantity
-                });
-                setProductPosted(temp);
-              })
-              .catch((e) => {
-                const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
-                temp.push({
-                  imageUri: exampleImageUri,
-                  title: child.val().title,
-                  price: child.val().price,
-                  id: id,
-                  description: child.val().description,
-                  quantity: child.val().quantity
-                });
-                setProductPosted(temp);
-              });
-              id ++;
-        });
+    await query.once("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        firebase
+          .storage()
+          .ref("/" + child.val().uploader + child.val().title + "0")
+          .getDownloadURL()
+          .then((url) => {
+            temp.push({
+              imageUri: url,
+              title: child.val().title,
+              price: child.val().price,
+              id: id,
+              description: child.val().description,
+              quantity: child.val().quantity,
+            });
+            id++;
+            setProductPosted(temp);
+          })
+          .catch((e) => {
+            const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri;
+            temp.push({
+              imageUri: exampleImageUri,
+              title: child.val().title,
+              price: child.val().price,
+              id: id,
+              description: child.val().description,
+              quantity: child.val().quantity,
+            });
+            id++;
+            setProductPosted(temp);
+          });
+      });
     });
-  }
+  };
 
-  useEffect(() => {getAccountProducts()}, [])
-
+  useEffect(() => {
+    getAccountProducts();
+  }, []);
 
   return (
     <Screen style={styles.container}>
