@@ -20,14 +20,35 @@ import firebase from "firebase";
 function AccountScreen({ navigation }) {
   const [refresh, onRefresh] = useState(false);
   const [productsPosted, setProductPosted] = useState([]);
+  const [followers, setFollowers] = useState(0);
+  const [followings, setFollowings] = useState(0);
+
+  const Authentication = useContext(Auth);
+
+  const checkFollow = async () => {
+    await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+        firebase.database().ref().child("/Users/" + child.key + "/Followers").once("value", function(snapshot) {
+          setFollowers(snapshot.numChildren() - 1);
+        });
+        firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
+          setFollowings(snapshot.numChildren() - 1);
+        });
+      });
+    })
+  };
+
+  useEffect(() => {checkFollow()}, []);
+
 
   const handleRefresh = () => {
+    checkFollow();
     getAccountProducts();
     console.log("refresh");
   };
 
   console.log(productsPosted.length);
-  const Authentication = useContext(Auth);
+  
 
   const getAccountProducts = async () => {
     const temp = [];
@@ -100,11 +121,11 @@ function AccountScreen({ navigation }) {
                 </View>
                 <View>
                   <Text style={styles.sectionHeaderText}>Followings</Text>
-                  <Text style={styles.sectionBodyText}>500</Text>
+                  <Text style={styles.sectionBodyText}>{followings}</Text>
                 </View>
                 <View>
                   <Text style={styles.sectionHeaderText}>Followers</Text>
-                  <Text style={styles.sectionBodyText}>1000</Text>
+                  <Text style={styles.sectionBodyText}>{followers}</Text>
                 </View>
               </View>
             </View>

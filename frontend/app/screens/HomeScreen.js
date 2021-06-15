@@ -53,7 +53,6 @@ function HomeScreen({ navigation }) {
               tags: snap.val().category,
             });
             setProductsToShow(initialValue);
-            console.log(initialValue.length);
             id++;
           })
           .catch((e) => {
@@ -83,7 +82,7 @@ function HomeScreen({ navigation }) {
     console.log("refresh");
   };
 
-  const handleChange = (character) => {
+  const handleChangeDrawer = (character) => {
     setInput(character);
   };
 
@@ -146,6 +145,7 @@ function HomeScreen({ navigation }) {
               setInput(item.title);
               console.log(item.title);
               drawer.current.closeDrawer();
+              handleRefresh();
             }}
           >
             <View style={styles.category}>

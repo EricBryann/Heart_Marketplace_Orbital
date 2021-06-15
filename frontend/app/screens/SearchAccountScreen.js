@@ -23,13 +23,40 @@ function SearchAccountScreen({ route }) {
     const accountDetails = route.params;
     const [refresh, onRefresh] = useState(false);
     const [productsPosted, setProductPosted] = useState([]);
+    const [follow, setFollow] = useState(false);
+    const [followers, setFollowers] = useState(0);
+    const [followings, setFollowings] = useState(0);
 
-    const getAccountProducts = () => {
+    const Authentication = useContext(Auth);
+
+    const checkFollow = async () => {
+      await firebase.database().ref().child("/Users").orderByChild("email").equalTo(accountDetails.email).once("value", function(snapshot) {
+        snapshot.forEach(function(child) {
+          firebase.database().ref().child("/Users/" + child.key + "/Followers").once("value", function(snapshot) {
+            setFollowers(snapshot.numChildren() - 1);
+            snapshot.forEach(function(child) {
+              if (child.val().fl === Authentication.user.email) {
+                console.log("followed");
+                setFollow(true);
+              }
+            });
+          });
+          firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
+            setFollowings(snapshot.numChildren() - 1);
+          });
+        });
+      })
+    };
+
+    useEffect(() => {checkFollow()}, []);
+
+    const getAccountProducts = async () => {
       const temp = [];
+
       var ref = firebase.database().ref("/Products");
       var query = ref.orderByChild("uploader").equalTo(accountDetails.username);
       var id = 1;
-      query.once("value", function(snapshot) {
+      await query.once("value", function(snapshot) {
           snapshot.forEach(function(child) {
               firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
                   temp.push({
@@ -62,9 +89,46 @@ function SearchAccountScreen({ route }) {
     useEffect(() => {getAccountProducts()}, []);
 
     const handleRefresh = () => {
+      checkFollow();
       getAccountProducts();
       console.log("refresh");
     };
+
+    const followButton = async () => {
+      if (!follow) {
+        var query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email);
+        await query.once("value", function(snapshot) {
+          snapshot.forEach(function(child) {
+            const following = firebase.database().ref("/Users/" + child.key + "/Followings").push();
+            following
+              .set({
+                fl: accountDetails.email
+              })
+              .then(() => {
+                console.log("Data updated.");
+              });
+          });
+        });
+        query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(accountDetails.email);
+        await query.once("value", function(snapshot) {
+          snapshot.forEach(function(child) {
+            const follower = firebase.database().ref("/Users/" + child.key + "/Followers").push();
+            follower
+              .set({
+                fl: Authentication.user.email
+              })
+              .then(() => {
+                console.log("Data updated.");
+              });
+          });
+        });
+        setFollow(true); 
+      }
+      else {
+
+      }
+    };
+
     return (
         <Screen style={styles.container}>
           <FlatList
@@ -73,7 +137,7 @@ function SearchAccountScreen({ route }) {
                 <View style={styles.topContainer}>
                   <Image
                     style={styles.image}
-                    source={require("../../assets/mypic.jpg")}
+                    source={require("../../assets/blank_pp.png")}
                   />
                   <View style={styles.detailSection}>
                     <View>
@@ -84,17 +148,18 @@ function SearchAccountScreen({ route }) {
                     </View>
                     <View>
                       <Text style={styles.sectionHeaderText}>Followings</Text>
-                      <Text style={styles.sectionBodyText}>500</Text>
+                      <Text style={styles.sectionBodyText}>{followings}</Text>
                     </View>
                     <View>
                       <Text style={styles.sectionHeaderText}>Followers</Text>
-                      <Text style={styles.sectionBodyText}>1000</Text>
+                      <Text style={styles.sectionBodyText}>{followers}</Text>
                     </View>
                   </View>
                 </View>
                 <View style={styles.button}>
                     <Button
-                        title="Follow"
+                        title={follow ? "UNFOLLOW" : "FOLLOW"}
+                        onPress={followButton}
                     />
                 </View>
                 <View style={styles.userDetailsContainer}>
@@ -125,7 +190,7 @@ function SearchAccountScreen({ route }) {
           ></FlatList>
         </Screen>
     );
-}
+  }
 
 const styles = StyleSheet.create({
     button: {
