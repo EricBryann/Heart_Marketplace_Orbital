@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "heartmarketplace",
-    "slug": "heartmarketplace",
+    "name": "ad-plication",
+    "slug": "ad-plication",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

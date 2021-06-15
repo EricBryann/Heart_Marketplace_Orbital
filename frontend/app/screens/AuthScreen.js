@@ -7,11 +7,8 @@ function AuthScreen({ navigation }) {
   return (
     <View style={styles.background}>
       <View style={styles.logoContainer}>
-        <Image
-          source={require("../../assets/heartMarketplaceLogo.jpg")}
-          style={styles.logo}
-        />
-        <Text style={styles.text}>Heart Marketplace</Text>
+        <Image source={require("../../assets/ads.png")} style={styles.logo} />
+        <Text style={styles.text}>Ad-plication</Text>
       </View>
       <View style={styles.buttonContainer}>
         <AppButton title="Login" onPress={() => navigation.navigate("Login")} />

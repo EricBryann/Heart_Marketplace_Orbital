@@ -16,7 +16,7 @@ import { getProducts } from "../Auth/Auth";
 import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
-import defaultphoto from "../../assets/blank_pp.png"
+import defaultphoto from "../../assets/blank_pp.png";
 
 import ListItem from "../components/list/ListItem";
 
@@ -29,46 +29,52 @@ function HomeScreen({ navigation }) {
   const getProductsToShow = () => {
     const initialValue = [];
     var id = 1;
-  
-    var products = firebase.database().ref('/Products');
-    products.on('value', (snapshot) => {
-      snapshot.forEach(snap => {
-        firebase.storage().ref('/' + snap.val().uploader + snap.val().title + '0').getDownloadURL().then((url) => {
-          initialValue.push({
-            imageUri: url,
-            title: snap.val().title,
-            quantity: snap.val().quantity,
-            price: snap.val().price,
-            id: id,
-            description: snap.val().description,
-            ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
-            tags: snap.val().category.toLowerCase()
+
+    var products = firebase.database().ref("/Products");
+    products.on("value", (snapshot) => {
+      snapshot.forEach((snap) => {
+        firebase
+          .storage()
+          .ref("/" + snap.val().uploader + snap.val().title + "0")
+          .getDownloadURL()
+          .then((url) => {
+            initialValue.push({
+              imageUri: url,
+              title: snap.val().title,
+              quantity: snap.val().quantity,
+              price: snap.val().price,
+              id: id,
+              description: snap.val().description,
+              ownerName: snap.val().uploader,
+              ownerImageUri: require("../../assets/mypic.jpg"),
+              tags: snap.val().category.toLowerCase(),
+            });
+            setProductsToShow(initialValue);
+            id++;
+          })
+          .catch((e) => {
+            const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri;
+            initialValue.push({
+              imageUri: exampleImageUri,
+              title: snap.val().title,
+              quantity: snap.val().quantity,
+              price: snap.val().price,
+              id: id,
+              description: snap.val().description,
+              ownerName: snap.val().uploader,
+              ownerImageUri: require("../../assets/mypic.jpg"),
+              tags: snap.val().category,
+            });
+            setProductsToShow(initialValue);
+            id++;
           });
-          setProductsToShow(initialValue);
-          id ++;
-        })
-        .catch((e) => {
-          const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
-          initialValue.push({
-            imageUri: exampleImageUri,
-            title: snap.val().title,
-            quantity: snap.val().quantity,
-            price: snap.val().price,
-            id: id,
-            description: snap.val().description,
-            ownerName: snap.val().uploader,
-            ownerImageUri: require("../../assets/mypic.jpg"),
-            tags: snap.val().category
-          });
-          setProductsToShow(initialValue);
-          id ++;
-        });
       });
     });
-  }
+  };
 
-  useEffect(() => {getProductsToShow()}, []);
+  useEffect(() => {
+    getProductsToShow();
+  }, []);
 
   const handleRefresh = () => {
     getProductsToShow();
@@ -163,7 +169,7 @@ function HomeScreen({ navigation }) {
     productsToShow.filter((product) => {
       return product.tags.includes(input);
     });
-  }
+  };
 
   useEffect(() => {
     catHelper(input);
@@ -182,7 +188,7 @@ function HomeScreen({ navigation }) {
         <View style={styles.home}>
           <View style={styles.menu} backgroundColor="white">
             <View style={styles.menuTitle}>
-              <Text style={styles.title}>Heart Marketplace</Text>
+              <Text style={styles.title}>Ad-plication</Text>
             </View>
             <View style={styles.chatIcon}>
               <TouchableWithoutFeedback

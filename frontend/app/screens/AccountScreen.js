@@ -26,6 +26,7 @@ function AccountScreen({ navigation }) {
     console.log("refresh");
   };
 
+  console.log(productsPosted.length);
   const Authentication = useContext(Auth);
 
   const getAccountProducts = async () => {
@@ -78,7 +79,7 @@ function AccountScreen({ navigation }) {
     <Screen style={styles.container}>
       <View style={styles.menu}>
         <View style={styles.menuTitle}>
-          <Text style={styles.title}>Heart Marketplace</Text>
+          <Text style={styles.title}>Ad-plication</Text>
         </View>
         <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
           <Ionicons name="menu-outline" size={35} color="black" />
