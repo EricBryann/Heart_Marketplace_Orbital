@@ -26,40 +26,48 @@ function AccountScreen({ navigation }) {
     console.log("refresh");
   };
 
+  console.log(productsPosted.length);
   const Authentication = useContext(Auth);
 
-  const getAccountProducts = () => {
+  const getAccountProducts = async () => {
     const temp = [];
     var ref = firebase.database().ref("/Products");
-    var query = ref.orderByChild("uploader").equalTo(Authentication.user.displayName);
+    var query = ref
+      .orderByChild("uploader")
+      .equalTo(Authentication.user.displayName);
     var id = 1;
-    query.once("value", function(snapshot) {
-        snapshot.forEach(function(child) {
-            firebase.storage().ref('/' + child.val().uploader + child.val().title + '0').getDownloadURL().then((url) => {
-                temp.push({
-                  imageUri: url,
-                  title: child.val().title,
-                  price: child.val().price,
-                  id: id,
-                  description: child.val().description,
-                  quantity: child.val().quantity
-                });
-                setProductPosted(temp);
-              })
-              .catch((e) => {
-                const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri
-                temp.push({
-                  imageUri: exampleImageUri,
-                  title: child.val().title,
-                  price: child.val().price,
-                  id: id,
-                  description: child.val().description,
-                  quantity: child.val().quantity
-                });
-                setProductPosted(temp);
-              });
-              id ++;
-        });
+    await query.once("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        firebase
+          .storage()
+          .ref("/" + child.val().uploader + child.val().title + "0")
+          .getDownloadURL()
+          .then((url) => {
+            temp.push({
+              imageUri: url,
+              title: child.val().title,
+              price: child.val().price,
+              id: id,
+              description: child.val().description,
+              quantity: child.val().quantity,
+            });
+            id++;
+            setProductPosted(temp);
+          })
+          .catch((e) => {
+            const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri;
+            temp.push({
+              imageUri: exampleImageUri,
+              title: child.val().title,
+              price: child.val().price,
+              id: id,
+              description: child.val().description,
+              quantity: child.val().quantity,
+            });
+            id++;
+            setProductPosted(temp);
+          });
+      });
     });
   };
 
@@ -69,7 +77,7 @@ function AccountScreen({ navigation }) {
     <Screen style={styles.container}>
       <View style={styles.menu}>
         <View style={styles.menuTitle}>
-          <Text style={styles.title}>Heart Marketplace</Text>
+          <Text style={styles.title}>Ad-plication</Text>
         </View>
         <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
           <Ionicons name="menu-outline" size={35} color="black" />

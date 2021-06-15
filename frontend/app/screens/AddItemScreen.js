@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import * as Yup from "yup";
 import AppFormField from "../components/form/AppFormField";
@@ -12,7 +12,6 @@ import { Auth } from "../Auth/Auth";
 import { useFormikContext } from "formik";
 import SubmitButton from "../components/SubmitButton";
 
-
 function AddItemScreen(props) {
   const validationSchema = Yup.object().shape({
     images: Yup.array().min(1, "Please select at least 1 image"),
@@ -22,36 +21,44 @@ function AddItemScreen(props) {
     category: Yup.string().required().nullable().label("Category"),
     description: Yup.string().label("Description"),
   });
-  
+
   uploadImage = async (uri, name) => {
     const response = await fetch(uri);
     const blob = await response.blob();
     var ref = firebase.storage().ref().child(name);
     return ref.put(blob);
-  }
-  
-  
-  
+  };
+
   const Authentication = useContext(Auth);
 
-  const handleValues = async ({images,title,quantity,price,category,description}) => {
+  const handleValues = async ({
+    images,
+    title,
+    quantity,
+    price,
+    category,
+    description,
+  }) => {
     try {
-      for (var i = 0; i < images.length; i ++) {
+      for (var i = 0; i < images.length; i++) {
         uploadImage(images[i], Authentication.user.displayName + title + i);
       }
-      
-      const newReference = firebase.database().ref('/Products').push();
+
+      const newReference = firebase.database().ref("/Products").push();
       newReference
-      .set({
-        imagenum: images.length,
-        title: title,
-        quantity: quantity,
-        price: price,
-        category: category,
-        description: description,
-        uploader: Authentication.user.displayName
-      })
-      .then(() => console.log('Data updated.'));
+        .set({
+          imagenum: images.length,
+          title: title,
+          quantity: quantity,
+          price: price,
+          category: category,
+          description: description,
+          uploader: Authentication.user.displayName,
+        })
+        .then(() => {
+          console.log("Data updated.");
+          props.navigation.navigate("Account");
+        });
     } catch (error) {
       alert(error);
     }
@@ -67,7 +74,7 @@ function AddItemScreen(props) {
             quantity: "",
             price: "",
             category: "",
-            description: ""
+            description: "",
           }}
           onSubmit={(values) => {
             handleValues(values);
@@ -100,7 +107,7 @@ function AddItemScreen(props) {
             numberOfLines={5}
           />
           <View style={styles.button}>
-            <SubmitButton title="Add Item"/>
+            <SubmitButton title="Add Item" />
           </View>
         </AppForm>
       </ScrollView>

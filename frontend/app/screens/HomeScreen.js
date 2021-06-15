@@ -16,7 +16,7 @@ import { getProducts } from "../Auth/Auth";
 import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
-import defaultphoto from "../../assets/blank_pp.png"
+import defaultphoto from "../../assets/blank_pp.png";
 
 import ListItem from "../components/list/ListItem";
 
@@ -30,6 +30,7 @@ function HomeScreen({ navigation }) {
     const initialValue = [];
     var id = 1;
 
+<<<<<<< HEAD
     var ref = firebase.database().ref("/Products");
     var query = (input !== "All" ? ref.orderByChild("category").equalTo(input) : ref);
     
@@ -63,15 +64,53 @@ function HomeScreen({ navigation }) {
             ownerName: snap.val().uploader,
             ownerImageUri: require("../../assets/mypic.jpg"),
             tags: snap.val().category
+=======
+    var products = firebase.database().ref("/Products");
+    products.on("value", (snapshot) => {
+      snapshot.forEach((snap) => {
+        firebase
+          .storage()
+          .ref("/" + snap.val().uploader + snap.val().title + "0")
+          .getDownloadURL()
+          .then((url) => {
+            initialValue.push({
+              imageUri: url,
+              title: snap.val().title,
+              quantity: snap.val().quantity,
+              price: snap.val().price,
+              id: id,
+              description: snap.val().description,
+              ownerName: snap.val().uploader,
+              ownerImageUri: require("../../assets/mypic.jpg"),
+              tags: snap.val().category.toLowerCase(),
+            });
+            setProductsToShow(initialValue);
+            id++;
+          })
+          .catch((e) => {
+            const exampleImageUri = Image.resolveAssetSource(defaultphoto).uri;
+            initialValue.push({
+              imageUri: exampleImageUri,
+              title: snap.val().title,
+              quantity: snap.val().quantity,
+              price: snap.val().price,
+              id: id,
+              description: snap.val().description,
+              ownerName: snap.val().uploader,
+              ownerImageUri: require("../../assets/mypic.jpg"),
+              tags: snap.val().category,
+            });
+            setProductsToShow(initialValue);
+            id++;
+>>>>>>> 4643a81ea013e74a5d917bb1963b9349582aaaa0
           });
-          setProductsToShow(initialValue);
-          id ++;
-        });
       });
     });
-  }
+  };
 
-  useEffect(() => {getProductsToShow()}, []);
+  useEffect(() => {
+    getProductsToShow();
+  }, []);
 
   const handleRefresh = () => {
     getProductsToShow();
@@ -91,57 +130,40 @@ function HomeScreen({ navigation }) {
     },
     {
       backgroundColor: "#fc5c65",
-      icon: "floor-lamp",
-      title: "Furniture",
+      icon: "account-heart",
+      title: "Volunteer",
       id: 2,
     },
     {
       backgroundColor: "#fd9644",
-      icon: "car",
-      title: "Cars",
+      icon: "bag-checked",
+      title: "Jobs",
       id: 3,
     },
     {
       backgroundColor: "#fed330",
-      icon: "camera",
-      title: "Cameras",
+      icon: "basketball",
+      title: "Sold items",
       id: 4,
     },
     {
       backgroundColor: "#26de81",
-      icon: "cards",
-      title: "Games",
+      icon: "cash",
+      title: "Donation",
       id: 5,
     },
     {
       backgroundColor: "#2bcbba",
-      icon: "shoe-heel",
-      title: "Clothing",
+      icon: "tshirt-crew",
+      title: "Second-hand",
       id: 6,
     },
-    {
-      backgroundColor: "#45aaf2",
-      icon: "basketball",
-      title: "Sports",
-      id: 7,
-    },
-    {
-      backgroundColor: "#4b7bec",
-      icon: "headphones",
-      title: "Movies & Music",
-      id: 8,
-    },
-    {
-      backgroundColor: "#a55eea",
-      icon: "book-open-variant",
-      title: "Books",
-      id: 9,
-    },
+
     {
       backgroundColor: "#778ca3",
       icon: "application",
       title: "Other",
-      id: 10,
+      id: 7,
     },
   ];
 
@@ -174,6 +196,20 @@ function HomeScreen({ navigation }) {
     </View>
   );
 
+<<<<<<< HEAD
+=======
+  const catHelper = (input) => {
+    if (input === "all") return productsToShow;
+    productsToShow.filter((product) => {
+      return product.tags.includes(input);
+    });
+  };
+
+  useEffect(() => {
+    catHelper(input);
+  }, [input]);
+
+>>>>>>> 4643a81ea013e74a5d917bb1963b9349582aaaa0
   return (
     <View style={styles.fl}>
       <DrawerLayout
@@ -187,7 +223,7 @@ function HomeScreen({ navigation }) {
         <View style={styles.home}>
           <View style={styles.menu} backgroundColor="white">
             <View style={styles.menuTitle}>
-              <Text style={styles.title}>Heart Marketplace</Text>
+              <Text style={styles.title}>Ad-plication</Text>
             </View>
             <View style={styles.chatIcon}>
               <TouchableWithoutFeedback

@@ -14,57 +14,40 @@ function CategoryOptions({ title, iconName, onSelect, selectedItem }) {
   const categories = [
     {
       backgroundColor: "#fc5c65",
-      icon: "floor-lamp",
-      title: "Furniture",
+      icon: "account-heart",
+      title: "Volunteer",
       id: 1,
     },
     {
       backgroundColor: "#fd9644",
-      icon: "car",
-      title: "Cars",
+      icon: "bag-checked",
+      title: "Jobs",
       id: 2,
     },
     {
       backgroundColor: "#fed330",
-      icon: "camera",
-      title: "Cameras",
+      icon: "basketball",
+      title: "Sold items",
       id: 3,
     },
     {
       backgroundColor: "#26de81",
-      icon: "cards",
-      title: "Games",
+      icon: "cash",
+      title: "Donation",
       id: 4,
     },
     {
       backgroundColor: "#2bcbba",
-      icon: "shoe-heel",
-      title: "Clothing",
+      icon: "tshirt-crew",
+      title: "Second-hand",
       id: 5,
     },
-    {
-      backgroundColor: "#45aaf2",
-      icon: "basketball",
-      title: "Sports",
-      id: 6,
-    },
-    {
-      backgroundColor: "#4b7bec",
-      icon: "headphones",
-      title: "Movies & Music",
-      id: 7,
-    },
-    {
-      backgroundColor: "#a55eea",
-      icon: "book-open-variant",
-      title: "Books",
-      id: 8,
-    },
+
     {
       backgroundColor: "#778ca3",
       icon: "application",
       title: "Other",
-      id: 9,
+      id: 6,
     },
   ];
   const [showModal, setShowModal] = useState(false);
