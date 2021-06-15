@@ -1,8 +1,7 @@
 import { createContext } from "react";
 import { Image } from 'react-native';
 import firebase from "firebase";
-import defaultphoto from "../../assets/mypic.jpg"
-
+import defaultphoto from "../../assets/blank_pp.png"
 
 const Auth = createContext();
 

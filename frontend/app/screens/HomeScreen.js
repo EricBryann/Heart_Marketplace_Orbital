@@ -23,16 +23,18 @@ import ListItem from "../components/list/ListItem";
 function HomeScreen({ navigation }) {
   const [selected, setSelected] = useState("products");
   const [refresh, setRefresh] = useState(false);
-  const [input, setInput] = useState("all");
+  const [input, setInput] = useState("All");
   const [productsToShow, setProductsToShow] = useState([]);
 
   const getProductsToShow = () => {
     const initialValue = [];
     var id = 1;
-  
-    var products = firebase.database().ref('/Products');
-    products.on('value', (snapshot) => {
-      snapshot.forEach(snap => {
+
+    var ref = firebase.database().ref("/Products");
+    var query = (input !== "All" ? ref.orderByChild("category").equalTo(input) : ref);
+    
+    query.once("value", function(snapshot) {
+      snapshot.forEach(function(snap) {
         firebase.storage().ref('/' + snap.val().uploader + snap.val().title + '0').getDownloadURL().then((url) => {
           initialValue.push({
             imageUri: url,
@@ -43,9 +45,10 @@ function HomeScreen({ navigation }) {
             description: snap.val().description,
             ownerName: snap.val().uploader,
             ownerImageUri: require("../../assets/mypic.jpg"),
-            tags: snap.val().category.toLowerCase()
+            tags: snap.val().category
           });
           setProductsToShow(initialValue);
+          console.log(initialValue.length);
           id ++;
         })
         .catch((e) => {
@@ -74,6 +77,7 @@ function HomeScreen({ navigation }) {
     getProductsToShow();
     console.log("refresh");
   };
+
   const handleChange = (character) => {
     setInput(character);
   };
@@ -141,11 +145,6 @@ function HomeScreen({ navigation }) {
     },
   ];
 
-  const handleDrawerSlide = (status) => {
-    // outputs a value between 0 and 1
-    console.log(status);
-  };
-
   const drawer = useRef();
   const renderDrawer = (
     <View style={styles.drawer}>
@@ -153,10 +152,10 @@ function HomeScreen({ navigation }) {
         data={categories}
         keyExtractor={(category) => category.id.toString()}
         numColumns={1}
-        renderItem={({ item }) => (
+        renderItem={({ item }) => ( 
           <TouchableWithoutFeedback
             onPress={() => {
-              setInput(item.title.toLowerCase());
+              setInput(item.title);
               console.log(item.title);
               drawer.current.closeDrawer();
             }}
@@ -174,17 +173,6 @@ function HomeScreen({ navigation }) {
       />
     </View>
   );
-
-  const catHelper = (input) => {
-    if (input === "all") return productsToShow;
-    productsToShow.filter((product) => {
-      return product.tags.includes(input);
-    });
-  }
-
-  useEffect(() => {
-    catHelper(input);
-  }, [input]);
 
   return (
     <View style={styles.fl}>

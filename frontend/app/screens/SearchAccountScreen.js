@@ -57,9 +57,9 @@ function SearchAccountScreen({ route }) {
                 id ++;
           });
       });
-    }
+    };
 
-    useEffect(() => {getAccountProducts()}, [])
+    useEffect(() => {getAccountProducts()}, []);
 
     const handleRefresh = () => {
       getAccountProducts();

@@ -61,10 +61,9 @@ function AccountScreen({ navigation }) {
               id ++;
         });
     });
-  }
+  };
 
-  useEffect(() => {getAccountProducts()}, [])
-
+  useEffect(() => {getAccountProducts()}, []);
 
   return (
     <Screen style={styles.container}>
