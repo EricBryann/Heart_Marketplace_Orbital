@@ -54,6 +54,7 @@ function AddItemScreen(props) {
           category: category,
           description: description,
           uploader: Authentication.user.displayName,
+          uploaderemail: Authentication.user.email
         })
         .then(() => {
           console.log("Data updated.");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import Screen from "../components/Screen";
 import { FontAwesome } from "@expo/vector-icons";
+import { Auth } from "../Auth/Auth";
 import colors from "../config/colors";
 import HomeItem from "../components/HomeItem";
 import { getProducts } from "../Auth/Auth";
@@ -25,14 +26,42 @@ function HomeScreen({ navigation }) {
   const [refresh, setRefresh] = useState(false);
   const [input, setInput] = useState("All");
   const [productsToShow, setProductsToShow] = useState([]);
+  const [followList, setFollowList] = useState([]);
+  const Authentication = useContext(Auth);
+
+
+
+  const checkFollow = async () => {
+    await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+        firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
+          snapshot.forEach(function(child) {
+            followList.push(child.val().email);
+            console.log(followList.length);
+          });
+        });
+      });
+    })
+  };
+
+  useEffect(() => {checkFollow()}, []);
+
 
   const getProductsToShow = () => {
     const initialValue = [];
-    var id = 1;
 
+    var id = 1;
+  
     var ref = firebase.database().ref("/Products");
-    var query =
-      input !== "All" ? ref.orderByChild("category").equalTo(input) : ref;
+    var query = 
+      (input !== "All" ? 
+        (input !== "Following" ? 
+          ref.orderByChild("category").equalTo(input) : 
+          (followList.length > 0 ? 
+            ref.orderByChild("email").equalTo(followList[0]) :
+            ref) 
+        ) :
+      ref);
 
     query.once("value", function (snapshot) {
       snapshot.forEach(function (snap) {
@@ -78,6 +107,7 @@ function HomeScreen({ navigation }) {
   }, []);
 
   const handleRefresh = () => {
+    checkFollow();
     getProductsToShow();
     console.log("refresh");
   };
@@ -94,41 +124,47 @@ function HomeScreen({ navigation }) {
       id: 1,
     },
     {
+      backgroundColor: "#67f71f",
+      icon: "account-multiple",
+      title: "Following",
+      id: 2,
+    },
+    {
       backgroundColor: "#fc5c65",
       icon: "account-heart",
       title: "Volunteer",
-      id: 2,
+      id: 3,
     },
     {
       backgroundColor: "#fd9644",
       icon: "bag-checked",
       title: "Jobs",
-      id: 3,
+      id: 4,
     },
     {
       backgroundColor: "#fed330",
       icon: "basketball",
       title: "Sold items",
-      id: 4,
+      id: 5,
     },
     {
       backgroundColor: "#26de81",
       icon: "cash",
       title: "Donation",
-      id: 5,
+      id: 6,
     },
     {
       backgroundColor: "#2bcbba",
       icon: "tshirt-crew",
       title: "Second-hand",
-      id: 6,
+      id: 7,
     },
 
     {
       backgroundColor: "#778ca3",
       icon: "application",
       title: "Other",
-      id: 7,
+      id: 8,
     },
   ];
 
