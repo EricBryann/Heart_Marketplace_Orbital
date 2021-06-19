@@ -29,10 +29,10 @@ function AccountScreen({ navigation }) {
     await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
       snapshot.forEach(function(child) {
         firebase.database().ref().child("/Users/" + child.key + "/Followers").once("value", function(snapshot) {
-          setFollowers(snapshot.numChildren() - 1);
+          setFollowers(snapshot.numChildren());
         });
         firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
-          setFollowings(snapshot.numChildren() - 1);
+          setFollowings(snapshot.numChildren());
         });
       });
     })

@@ -58,7 +58,7 @@ function HomeScreen({ navigation }) {
         (input !== "Following" ? 
           ref.orderByChild("category").equalTo(input) : 
           (followList.length > 0 ? 
-            ref.orderByChild("email").equalTo(followList[0]) :
+            ref.orderByChild("uploaderemail").equalTo(followList[0]) :
             ref) 
         ) :
       ref);

@@ -43,27 +43,6 @@ function SignUpScreen() {
           password: user.password
         })
         .then(() => {
-          var query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email);
-          query.once("value", function(snapshot) {
-            snapshot.forEach(function(child) {
-              const followingset = firebase.database().ref("/Users/" + child.key + "/Followings").push();
-              followingset
-                .set({
-                  fl: "null"
-                })
-                .then(() => {
-                  console.log("Data updated.");
-                });
-                const followerset = firebase.database().ref("/Users/" + child.key + "/Followers").push();
-                followerset
-                  .set({
-                    fl: "null"
-                  })
-                  .then(() => {
-                    console.log("Data updated.");
-                  });
-              });
-          });
   
           console.log('Data updated.');
         });
