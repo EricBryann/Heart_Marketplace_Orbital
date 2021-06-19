@@ -32,12 +32,14 @@ function HomeScreen({ navigation }) {
 
 
   const checkFollow = async () => {
+    const temp = [];
     await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
       snapshot.forEach(function(child) {
         firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
           snapshot.forEach(function(child) {
-            followList.push(child.val().email);
-            console.log(followList.length);
+            temp.push(child.val().fl);
+            setFollowList(temp);
+            console.log(child.val().fl);
           });
         });
       });

@@ -128,12 +128,10 @@ function SearchAccountScreen({ route }) {
         var query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(accountDetails.email);
         await query.once("value", function(snapshot) {
           snapshot.forEach(function(child1) {
-            console.log("test1");
             firebase.database().ref("/Users/" + child1.key + "/Followers").once("value", function(snapshot) {
               snapshot.forEach(function(child2) {
                 if (child2.val().fl === Authentication.user.email) {
                   firebase.database().ref("/Users/" + child1.key + "/Followers").child(child2.key).remove();
-                  console.log("test2");
                 }
               });
             });
@@ -142,12 +140,10 @@ function SearchAccountScreen({ route }) {
         query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email);
         await query.once("value", function(snapshot) {
           snapshot.forEach(function(child1) {
-            console.log("test3");
             firebase.database().ref("/Users/" + child1.key + "/Followings").once("value", function(snapshot) {
               snapshot.forEach(function(child2) {
                 if (child2.val().fl === accountDetails.email) {
                   firebase.database().ref("/Users/" + child1.key + "/Followings").child(child2.key).remove();
-                  console.log("test4");
                 }
               });
             });
