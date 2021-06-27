@@ -33,7 +33,10 @@ function LoginScreen() {
   return (
     <Screen style={styles.container}>
       <ScrollView>
-        <Image style={styles.logo} source={require("../../assets/ads.png")} />
+        <Image
+          style={styles.logo}
+          source={require("../../assets/heartMarketplaceLogo.jpg")}
+        />
         <AppForm
           initialValues={{ email: "", password: "" }}
           onSubmit={(values) => {

@@ -26,20 +26,35 @@ function AccountScreen({ navigation }) {
   const Authentication = useContext(Auth);
 
   const checkFollow = async () => {
-    await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
-      snapshot.forEach(function(child) {
-        firebase.database().ref().child("/Users/" + child.key + "/Followers").once("value", function(snapshot) {
-          setFollowers(snapshot.numChildren());
-        });
-        firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
-          setFollowings(snapshot.numChildren());
+    await firebase
+      .database()
+      .ref()
+      .child("/Users")
+      .orderByChild("email")
+      .equalTo(Authentication.user.email)
+      .once("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+          firebase
+            .database()
+            .ref()
+            .child("/Users/" + child.key + "/Followers")
+            .once("value", function (snapshot) {
+              setFollowers(snapshot.numChildren());
+            });
+          firebase
+            .database()
+            .ref()
+            .child("/Users/" + child.key + "/Followings")
+            .once("value", function (snapshot) {
+              setFollowings(snapshot.numChildren());
+            });
         });
       });
-    })
   };
 
-  useEffect(() => {checkFollow()}, []);
-
+  useEffect(() => {
+    checkFollow();
+  }, []);
 
   const handleRefresh = () => {
     checkFollow();
@@ -48,7 +63,6 @@ function AccountScreen({ navigation }) {
   };
 
   console.log(productsPosted.length);
-  
 
   const getAccountProducts = async () => {
     const temp = [];
@@ -92,13 +106,15 @@ function AccountScreen({ navigation }) {
     });
   };
 
-  useEffect(() => {getAccountProducts()}, []);
+  useEffect(() => {
+    getAccountProducts();
+  }, []);
 
   return (
     <Screen style={styles.container}>
       <View style={styles.menu}>
         <View style={styles.menuTitle}>
-          <Text style={styles.title}>Ad-plication</Text>
+          <Text style={styles.title}>Heart Marketplace</Text>
         </View>
         <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
           <Ionicons name="menu-outline" size={35} color="black" />

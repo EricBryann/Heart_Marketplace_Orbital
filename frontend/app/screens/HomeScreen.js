@@ -29,41 +29,49 @@ function HomeScreen({ navigation }) {
   const [followList, setFollowList] = useState([]);
   const Authentication = useContext(Auth);
 
-
-
   const checkFollow = async () => {
     const temp = [];
-    await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
-      snapshot.forEach(function(child) {
-        firebase.database().ref().child("/Users/" + child.key + "/Followings").once("value", function(snapshot) {
-          snapshot.forEach(function(child) {
-            temp.push(child.val().fl);
-            setFollowList(temp);
-            console.log(child.val().fl);
-          });
+    await firebase
+      .database()
+      .ref()
+      .child("/Users")
+      .orderByChild("email")
+      .equalTo(Authentication.user.email)
+      .once("value", function (snapshot) {
+        snapshot.forEach(function (child) {
+          firebase
+            .database()
+            .ref()
+            .child("/Users/" + child.key + "/Followings")
+            .once("value", function (snapshot) {
+              snapshot.forEach(function (child) {
+                temp.push(child.val().fl);
+                setFollowList(temp);
+                console.log(child.val().fl);
+              });
+            });
         });
       });
-    })
   };
 
-  useEffect(() => {checkFollow()}, []);
-
+  useEffect(() => {
+    checkFollow();
+  }, []);
 
   const getProductsToShow = () => {
     const initialValue = [];
 
     var id = 1;
-  
+
     var ref = firebase.database().ref("/Products");
-    var query = 
-      (input !== "All" ? 
-        (input !== "Following" ? 
-          ref.orderByChild("category").equalTo(input) : 
-          (followList.length > 0 ? 
-            ref.orderByChild("uploaderemail").equalTo(followList[0]) :
-            ref) 
-        ) :
-      ref);
+    var query =
+      input !== "All"
+        ? input !== "Following"
+          ? ref.orderByChild("category").equalTo(input)
+          : followList.length > 0
+          ? ref.orderByChild("uploaderemail").equalTo(followList[0])
+          : ref
+        : ref;
 
     query.once("value", function (snapshot) {
       snapshot.forEach(function (snap) {
@@ -213,7 +221,7 @@ function HomeScreen({ navigation }) {
         <View style={styles.home}>
           <View style={styles.menu} backgroundColor="white">
             <View style={styles.menuTitle}>
-              <Text style={styles.title}>Ad-plication</Text>
+              <Text style={styles.title}>Heart Marketplace</Text>
             </View>
             <View style={styles.chatIcon}>
               <TouchableWithoutFeedback
