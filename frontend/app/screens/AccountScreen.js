@@ -85,6 +85,7 @@ function AccountScreen({ navigation }) {
               id: id,
               description: child.val().description,
               quantity: child.val().quantity,
+              likes: child.val().likes
             });
             id++;
             setProductPosted(temp);
@@ -98,6 +99,7 @@ function AccountScreen({ navigation }) {
               id: id,
               description: child.val().description,
               quantity: child.val().quantity,
+              likes: child.val().likes
             });
             id++;
             setProductPosted(temp);

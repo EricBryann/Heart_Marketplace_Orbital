@@ -4,6 +4,8 @@ import colors from "../config/colors";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import AppButton from "../components/AppButton";
+import firebase from "firebase";
+
 
 function CardItemDetailsScreen({ route }) {
   const itemDetails = route.params;
@@ -13,6 +15,7 @@ function CardItemDetailsScreen({ route }) {
   const [trade, setTrade] = useState(false);
   const handleLike = () => {
     setIsLiked((prev) => !prev);
+    firebase.database().ref('/Products/' + itemDetails.key + '/likes').set(itemDetails.likes + 1);
   };
 
   const handleTrade = () => {};
@@ -36,7 +39,7 @@ function CardItemDetailsScreen({ route }) {
                   <FontAwesome name="heart-o" size={30} />
                 )}
               </TouchableWithoutFeedback>
-              <Text style={styles.likeNumber}>17 Likes</Text>
+              <Text style={styles.likeNumber}>{itemDetails.likes}</Text>
             </View>
             <View style={styles.tradeButtonContainer}>
               {withTradeButton && (

@@ -47,6 +47,7 @@ function SearchScreen({ navigation }) {
               ownerName: snap.val().uploader,
               ownerImageUri: require("../../assets/blank_pp.png"),
               tags: snap.val().category.toLowerCase(),
+              likes: snap.val().likes
             });
             setProductsToShow(initialValue);
             id++;
@@ -63,6 +64,7 @@ function SearchScreen({ navigation }) {
               ownerName: snap.val().uploader,
               ownerImageUri: require("../../assets/blank_pp.png"),
               tags: snap.val().category,
+              likes: snap.val().likes
             });
             setProductsToShow(initialValue);
             id++;

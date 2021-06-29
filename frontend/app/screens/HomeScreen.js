@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
   StyleSheet,
-  TextInput,
   TouchableWithoutFeedback,
   Text,
-  Modal,
   FlatList,
 } from "react-native";
 import Screen from "../components/Screen";
@@ -18,7 +16,6 @@ import DrawerLayout from "react-native-gesture-handler/DrawerLayout";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import firebase from "firebase";
 import defaultphoto from "../../assets/blank_pp.png";
-
 import ListItem from "../components/list/ListItem";
 
 function HomeScreen({ navigation }) {
@@ -90,6 +87,8 @@ function HomeScreen({ navigation }) {
               ownerName: snap.val().uploader,
               ownerImageUri: require("../../assets/blank_pp.png"),
               tags: snap.val().category,
+              likes: snap.val().likes,
+              key: snap.key
             });
             setProductsToShow(initialValue);
             id++;
@@ -106,6 +105,8 @@ function HomeScreen({ navigation }) {
               ownerName: snap.val().uploader,
               ownerImageUri: require("../../assets/blank_pp.png"),
               tags: snap.val().category,
+              likes: snap.val().likes,
+              key: snap.key
             });
           });
       });
@@ -245,6 +246,7 @@ function HomeScreen({ navigation }) {
               <HomeItem
                 title={item.title}
                 price={item.price}
+                likes={item.likes}
                 imageUri={item.imageUri}
                 ownerName={item.ownerName}
                 onItemPress={() =>

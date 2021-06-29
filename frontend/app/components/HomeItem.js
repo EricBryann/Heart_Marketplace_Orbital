@@ -11,11 +11,14 @@ import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import colors from "../config/colors";
 import ListItem from "./list/ListItem";
 
-function FeedItem({ title, imageUri, onItemPress, ownerName, ownerImageUri }) {
+function FeedItem({ title, imageUri, likes, onItemPress, ownerName, ownerImageUri }) {
   const [like, setLike] = useState(false);
+
   const likeHandler = () => {
     setLike((prev) => !prev);
+    
   };
+
   return (
     <>
       <View style={styles.container}>
@@ -50,7 +53,7 @@ function FeedItem({ title, imageUri, onItemPress, ownerName, ownerImageUri }) {
                   )}
                 </TouchableWithoutFeedback>
                 <View style={styles.numberLikes}>
-                  <Text style={styles.numberLikesText}>17 Likes</Text>
+                  <Text style={styles.numberLikesText}>{likes}</Text>
                 </View>
               </View>
             </View>

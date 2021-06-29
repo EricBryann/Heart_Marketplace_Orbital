@@ -12,9 +12,6 @@ import {
 import colors from "../config/colors";
 import Screen from "../components/Screen";
 import { Auth } from "../Auth/Auth";
-import { auth } from "../api/firebase";
-import { getProductsByUser } from "../Auth/Auth";
-import { Ionicons } from "@expo/vector-icons";
 import CardItem from "../components/CardItem";
 import defaultphoto from "../../assets/mypic.jpg"
 import firebase from "firebase";
@@ -65,7 +62,8 @@ function SearchAccountScreen({ route }) {
                     price: child.val().price,
                     id: id,
                     description: child.val().description,
-                    quantity: child.val().quantity
+                    quantity: child.val().quantity,
+                    likes: child.val().likes
                   });
                   setProductPosted(temp);
                 })
@@ -77,7 +75,8 @@ function SearchAccountScreen({ route }) {
                     price: child.val().price,
                     id: id,
                     description: child.val().description,
-                    quantity: child.val().quantity
+                    quantity: child.val().quantity,
+                    likes: child.val().likes
                   });
                   setProductPosted(temp);
                 });

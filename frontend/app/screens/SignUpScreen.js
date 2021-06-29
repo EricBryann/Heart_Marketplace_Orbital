@@ -29,6 +29,7 @@ function SignUpScreen() {
       Authentication.setUser({
         name: currentUser.displayName,
         username: user.username,
+        phone: user.phone,
         email: currentUser.email,
         photoURL: user.imageUri,
       });
@@ -39,6 +40,7 @@ function SignUpScreen() {
         .set({
           name: user.name,
           username: user.username,
+          phone: user.phone,
           email: user.email,
           password: user.password
         })
@@ -68,6 +70,7 @@ function SignUpScreen() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required().label("Name"),
     username: Yup.string().required().label("Username"),
+    phone: Yup.string().required().label("Phone"),
     email: Yup.string().required().email().label("Email"),
     password: Yup.string().required().min(8).label("Password"),
   });
@@ -80,8 +83,9 @@ function SignUpScreen() {
             imageUri: "",
             name: "",
             username: "",
+            phone: "",
             email: "",
-            password: "",
+            password: ""
           }}
           onSubmit={(values) => {
             signUp(values);
@@ -91,13 +95,26 @@ function SignUpScreen() {
           <View style={styles.image}>
             <ImageInput imageUri={imageUri} onPress={handlePress} />
           </View>
-          <AppFormField name="name" iconName="account" placeholderName="Name" />
+          <AppFormField 
+            name="name" 
+            iconName="account" 
+            placeholderName="Name" 
+          />
           <AppFormField
             name="username"
             iconName="account"
             placeholderName="Username"
           />
-          <AppFormField name="email" iconName="email" placeholder="Email" />
+          <AppFormField 
+            name="phone" 
+            iconName="phone" 
+            placeholder="Phone Number" 
+          />
+          <AppFormField 
+            name="email" 
+            iconName="email" 
+            placeholder="Email" 
+          />
           <AppFormField
             name="password"
             iconName="lock"
