@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -10,14 +10,52 @@ import {
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import colors from "../config/colors";
 import ListItem from "./list/ListItem";
+import firebase from "firebase";
+import { Auth } from "../Auth/Auth";
 
-function FeedItem({ title, imageUri, likes, onItemPress, ownerName, ownerImageUri }) {
+function FeedItem({ title, imageUri, likes, onItemPress, ownerName, ownerImageUri, keyVal }) {
   const [like, setLike] = useState(false);
 
-  const likeHandler = () => {
-    setLike((prev) => !prev);
-    
+  const Authentication = useContext(Auth);
+
+  const likeHandler = async () => {
+    if (!like) {
+      setLike((prev) => !prev);
+      firebase.database().ref('/Products/' + keyVal + '/likes').set(likes + 1);
+      var query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email);
+      await query.once("value", function(snapshot) {
+        snapshot.forEach(function(child) {
+          const following = firebase.database().ref("/Users/" + child.key + "/Likes").push();
+          following
+            .set({
+              fl: keyVal
+            })
+            .then(() => {
+              console.log("Data updated.");
+            });
+        });
+      });  
+    }
+    else {
+      
+    }
   };
+
+  const checkLike = async () => {
+    await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+        firebase.database().ref().child("/Users/" + child.key + "/Likes").once("value", function(snapshot) {
+          snapshot.forEach(function(child) {
+            if (child.val().fl === keyVal) {
+              setLike(true);
+            }
+          });
+        });
+      });
+    })
+  };
+
+  useEffect(() => {checkLike()}, []);
 
   return (
     <>

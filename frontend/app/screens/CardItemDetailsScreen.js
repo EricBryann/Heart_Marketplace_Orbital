@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import colors from "../config/colors";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import AppButton from "../components/AppButton";
 import firebase from "firebase";
-
+import { Auth } from "../Auth/Auth";
 
 function CardItemDetailsScreen({ route }) {
   const itemDetails = route.params;
@@ -13,10 +13,44 @@ function CardItemDetailsScreen({ route }) {
   const withTradeButton = false;
   const [isLiked, setIsLiked] = useState(false);
   const [trade, setTrade] = useState(false);
-  const handleLike = () => {
+  
+  const Authentication = useContext(Auth);
+
+  const handleLike = async () => {
     setIsLiked((prev) => !prev);
     firebase.database().ref('/Products/' + itemDetails.key + '/likes').set(itemDetails.likes + 1);
+    var query = firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email);
+    await query.once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+        const following = firebase.database().ref("/Users/" + child.key + "/Likes").push();
+        following
+          .set({
+            fl: itemDetails.key
+          })
+          .then(() => {
+            console.log("Data updated.");
+          });
+      });
+    });
   };
+
+  const checkLike = async () => {
+    await firebase.database().ref().child("/Users").orderByChild("email").equalTo(Authentication.user.email).once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+        firebase.database().ref().child("/Users/" + child.key + "/Likes").once("value", function(snapshot) {
+          snapshot.forEach(function(child) {
+            console.log(child.val().fl)
+            if (child.val().fl === itemDetails.key) {
+              console.log("liked");
+              setIsLiked(true);
+            }
+          });
+        });
+      });
+    })
+  };
+
+  useEffect(() => {checkLike()}, []);
 
   const handleTrade = () => {};
 

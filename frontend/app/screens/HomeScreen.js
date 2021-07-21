@@ -256,6 +256,7 @@ function HomeScreen({ navigation }) {
                   })
                 }
                 ownerImageUri={item.ownerImageUri}
+                keyVal={item.key}
               />
             )}
             refreshing={refresh}

@@ -11,10 +11,11 @@ import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import colors from "../../config/colors";
 import ListItem from "./ListItem";
 
-function FeedItem({ title, imageUri, likes, onItemPress, ownerName, ownerImageUri }) {
+function FeedItem({ title, imageUri, likes, onItemPress, ownerName, ownerImageUri, key }) {
   const [like, setLike] = useState(false);
   const likeHandler = () => {
     setLike((prev) => !prev);
+    console.log("test");
   };
   return (
     <>

@@ -55,6 +55,7 @@ function AddItemScreen(props) {
           description: description,
           uploader: Authentication.user.displayName,
           uploaderemail: Authentication.user.email,
+          phone: Authentication.user.phone,
           likes: 0
         })
         .then(() => {
